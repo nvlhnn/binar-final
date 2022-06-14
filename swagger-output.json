@@ -1,0 +1,420 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "user@gmail.com"
+                },
+                "password": {
+                  "example": "User123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "example": 1
+                        },
+                        "name": {
+                          "example": "user"
+                        },
+                        "email": {
+                          "example": "user@gmail.com"
+                        },
+                        "password": {
+                          "example": "User123"
+                        },
+                        "city": {
+                          "example": "yogyakarta"
+                        },
+                        "address": {
+                          "example": "catur tunggal, rt 2 rw 5 sleman yogyakarta"
+                        },
+                        "phone": {
+                          "example": "0811221113868"
+                        },
+                        "createdAt": {
+                          "example": "2022-04-21T15:09:26.780Z"
+                        },
+                        "updatedAt": {
+                          "example": "2022-04-21T15:09:26.780Z"
+                        }
+                      }
+                    },
+                    "token": {
+                      "example": "$iqwuiqn187@%n.19281928tgajbsd.12jn1i2x8"
+                    }
+                  }
+                },
+                "message": {
+                  "example": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": [
+                    "Email Already Taken",
+                    "Password Must Contain a Number"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": "error"
+                },
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "user@gmail.com"
+                },
+                "password": {
+                  "example": "User123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "example": 1
+                        },
+                        "name": {
+                          "example": "user"
+                        },
+                        "email": {
+                          "example": "user@gmail.com"
+                        },
+                        "password": {
+                          "example": "User123"
+                        },
+                        "city": {
+                          "example": "yogyakarta"
+                        },
+                        "address": {
+                          "example": "catur tunggal, rt 2 rw 5 sleman yogyakarta"
+                        },
+                        "phone": {
+                          "example": "0811221113868"
+                        },
+                        "createdAt": {
+                          "example": "2022-04-21T15:09:26.780Z"
+                        },
+                        "updatedAt": {
+                          "example": "2022-04-21T15:09:26.780Z"
+                        }
+                      }
+                    },
+                    "token": {
+                      "example": "$iqwuiqn187@%n.19281928tgajbsd.12jn1i2x8"
+                    }
+                  }
+                },
+                "message": {
+                  "example": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": [
+                    "Email Already Taken",
+                    "Password Must Contain a Number"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": "error"
+                },
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-games/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "admin2"
+                },
+                "password": {
+                  "example": "Adminpass123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "example": 1
+                  },
+                  "username": {
+                    "example": "admin2"
+                  },
+                  "password": {
+                    "example": "Adminpass123"
+                  },
+                  "createdAt": {
+                    "example": "2022-04-21T15:09:26.780Z"
+                  },
+                  "updatedAt": {
+                    "example": "2022-04-22T15:09:26.780Z"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "example": "Adminpass"
+                      },
+                      "msg": {
+                        "example": "Password Must Contain a Number"
+                      },
+                      "param": {
+                        "example": "password"
+                      },
+                      "location": {
+                        "example": "body"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": 1
+                },
+                "username": {
+                  "example": "admin"
+                },
+                "password": {
+                  "example": "Adminpass123"
+                },
+                "createdAt": {
+                  "example": "2022-04-21T15:09:26.780Z"
+                },
+                "updatedAt": {
+                  "example": "2022-04-21T15:09:26.780Z"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "data deleted successfully"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -30,5 +30,5 @@ pertanyaan:
 -apakah buyer mendapat notifikasi saat penawaran ditolak?
 -apakah ketika logo notidikasi d klik otomatis hilang atau satu satu
 -apakah seller bisa edit barang
--apakah saat seller menerima tawaran, tawaran yang lain akan otomatis tercancle
+-kota/province
 -apakah kategori produk perlu table baru

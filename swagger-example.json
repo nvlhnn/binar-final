@@ -1,0 +1,336 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Binar Todo",
+    "description": "Todo App",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/user-registration": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Successfully create user"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Bad Request/Invalid input",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "msg": {
+                    "example": "Invalid value"
+                  },
+                  "param": {
+                    "example": "password"
+                  },
+                  "location": {
+                    "example": "body"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "syafif"
+                },
+                "password": {
+                  "example": "Qweqwe123$$"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "example": "qweqweqwe"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request/Invalid credential",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Invalid username / password"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "example": 1
+                  },
+                  "name": {
+                    "example": "Tugas matematika"
+                  },
+                  "completed": {
+                    "example": false
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Unathorized request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add todo",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "Kerjakan challenge"
+                },
+                "description": {
+                  "example": "Lorem ipsum"
+                },
+                "due_date": {
+                  "example": "2022-06-06"
+                },
+                "categoryId": {
+                  "example": 1
+                },
+                "completed": {
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Successfully create todo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Unauthorized request"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request/Invalid input",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "msg": {
+                    "example": "Invalid value"
+                  },
+                  "param": {
+                    "example": "name"
+                  },
+                  "location": {
+                    "example": "body"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": 1
+                },
+                "name": {
+                  "example": "Tugas matematika"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Todo not found"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Unauthorized request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api-docs": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    }
+  }
+}
