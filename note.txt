@@ -1,0 +1,34 @@
+api auth
+-login
+-register
+
+api user
+- get user info 
+- lengkapi akun
+
+api product
+- tambah produk | mengirim notifikasi published untuk seller
+- ubah status product berhasil terjual
+- get all product with filter
+- get a product
+- get seller products
+- get seller products have bids
+- get seller products sold
+
+api bids 
+- buyer melakukan bid | mengirim notifikasi bid_in untuk seller dan bidding untuk buyer
+- seller menerima bid | mengirim notifikasi bid_accepted untuk buyer
+- seller menolak bid 
+
+api notification
+- get all notification by user
+- update all notification status isRead
+- app date a notification status isRead
+
+
+pertanyaan:
+-apakah buyer mendapat notifikasi saat penawaran ditolak?
+-apakah ketika logo notidikasi d klik otomatis hilang atau satu satu
+-apakah seller bisa edit barang
+-apakah saat seller menerima tawaran, tawaran yang lain akan otomatis tercancle
+-apakah kategori produk perlu table baru

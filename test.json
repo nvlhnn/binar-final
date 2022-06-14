@@ -1,0 +1,41 @@
+// notif/:user_id
+
+
+{
+    "response" : [   
+        { 
+            "bid_price": "2500000",
+            "user": {
+            "name":"noval"
+            },
+            "product": {
+                "name":"kulkas",
+                "price":"3000000"
+            },
+            "status": "published"
+        },
+        { 
+            "bid_price": "2500000",
+            "user": {
+            "name":"noval"
+            },
+            "product": {
+                "name":"kulkas",
+                "price":"3000000"
+            },
+            "status": "bid_in"
+        },
+        { 
+            "bid_price": "2500000",
+            "user": {
+            "name":"noval"
+            },
+            "product": {
+                "name":"kulkas",
+                "price":"3000000"
+            },
+            "status": "bid_accepted"
+        }
+
+    ]
+}
