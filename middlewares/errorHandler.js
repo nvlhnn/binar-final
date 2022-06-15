@@ -1,12 +1,13 @@
+const setResponse = require("../helper/response.helper");
+
 function errorHandler(err, req, res, next) {
+  console.log(err);
   if (err.status) {
-    res.status(err.status).json({
-      message: err.message,
-    });
+    const response = setResponse("error", null, err.message);
+    res.status(err.status).json(response);
   } else {
-    res.status(500).json({
-      message: "Internal Server Error",
-    });
+    const response = setResponse("error", null, "Internal Server Error");
+    res.status(500).json(response);
   }
 }
 

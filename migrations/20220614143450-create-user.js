@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       phone: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.INTEGER,
       },
       verified: {
         type: Sequelize.BOOLEAN,

@@ -1,7 +1,7 @@
 const express = require("express");
 const errorHandler = require("./middlewares/errorHandler");
 const { sequelize, UserGame } = require("./models");
-const router = require("./routes/index.js");
+const router = require("./routes/index.route.js");
 const app = express();
 const port = 3000;
 const swaggerUi = require("swagger-ui-express");

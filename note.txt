@@ -28,7 +28,8 @@ api notification
 
 pertanyaan:
 -apakah buyer mendapat notifikasi saat penawaran ditolak?
--apakah ketika logo notidikasi d klik otomatis hilang atau satu satu
+-apakah ketika icon notidikasi d klik otomatis hilang atau satu satu
 -apakah seller bisa edit barang
 -kota/province
+-nama ada di register dan lengkapi akun
 -apakah kategori produk perlu table baru
