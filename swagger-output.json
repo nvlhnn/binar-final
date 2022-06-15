@@ -264,7 +264,7 @@
           }
         ]
       },
-      "post": {
+      "put": {
         "tags": ["user"],
         "summary": "update user data",
         "parameters": [
