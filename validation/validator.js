@@ -11,23 +11,7 @@ const validate = (schemas) => {
         return next();
       }
 
-      // const errors = result.array();
-
-      const password = result
-        .array()
-        .filter((a) => a.param == "password")
-        .map((item) => {
-          return item.msg;
-        });
-
-      const email = result
-        .array()
-        .filter((a) => a.param == "email")
-        .map((item) => {
-          return item.msg;
-        });
-
-      const errors = { email, password };
+      
 
       throw {
         status: 422,
