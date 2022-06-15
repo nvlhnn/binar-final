@@ -11,10 +11,10 @@ const validate = (schemas) => {
         return next();
       }
 
-      
+      errors = result.errors.map((a) => a.msg);
 
       throw {
-        status: 422,
+        status: 400,
         message: errors,
       };
     } catch (error) {
