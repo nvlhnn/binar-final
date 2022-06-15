@@ -1,6 +1,6 @@
 const passport = require("passport");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const { UserGame } = require("../models");
+const { User } = require("../models");
 
 /* Passport JWT Options */
 const options = {
@@ -15,7 +15,7 @@ const options = {
 passport.use(
   new JwtStrategy(options, async (payload, done) => {
     // payload adalah hasil terjemahan JWT, sesuai dengan apa yang kita masukkan di parameter pertama dari jwt.sign
-    UserGame.findByPk(payload.id)
+    User.findByPk(payload.id)
       .then((user) => done(null, user))
       .catch((err) => done(err, false));
   })
