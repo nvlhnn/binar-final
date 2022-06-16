@@ -7,7 +7,7 @@
   },
   "host": "secondhand-3.herokuapp.com",
   "basePath": "/api",
-  "tags": ["authentication", "user"],
+  "tags": ["authentication", "user", "product"],
 
   "schemes": ["https"],
   "paths": {
@@ -224,7 +224,7 @@
             }
           },
           "401": {
-            "description": "Bad Request",
+            "description": "Unauthorized",
             "schema": {
               "type": "object",
               "properties": {
@@ -343,7 +343,7 @@
             }
           },
           "401": {
-            "description": "Bad Request",
+            "description": "Unauthorized",
             "schema": {
               "type": "object",
               "properties": {
@@ -355,6 +355,139 @@
                 },
                 "message": {
                   "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/products": {
+      "post": {
+        "tags": ["product"],
+        "summary": "create product",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "Sea Stone"
+                },
+                "price": {
+                  "example": 420000
+                },
+                "categories": {
+                  "example": ["hobi", "kesehatan"]
+                },
+                "description": {
+                  "example": "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government"
+                },
+                "images": {
+                  "example": [
+                    "cloudinary.contoh-url-gambar-1.com",
+                    "cloudinary.contoh-url-gambar-2.com",
+                    "cloudinary.contoh-url-gambar-3.com"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "success"
+                },
+                "data": {
+                  "$ref": "#/definitions/Product"
+                },
+                "message": {
+                  "example": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": ["Name is required", "Price is required"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "error"
+                },
+                "data": {
+                  "example": null
+                },
+                "message": {
+                  "example": "User not verified"
                 }
               }
             }
@@ -417,6 +550,45 @@
         },
         "verified": {
           "example": true
+        },
+        "createdAt": {
+          "example": "2022-04-21T15:09:26.780Z"
+        },
+        "updatedAt": {
+          "example": "2022-04-21T15:09:26.780Z"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "example": 1
+        },
+        "name": {
+          "example": "Sea Stone"
+        },
+        "price": {
+          "example": 420000
+        },
+        "categories": {
+          "example": ["hobi", "kesehatan"]
+        },
+        "description": {
+          "example": "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government"
+        },
+        "status": {
+          "example": "published"
+        },
+        "seller": {
+          "$ref": "#/definitions/User"
+        },
+        "images": {
+          "example": [
+            "cloudinary.contoh-url-gambar-1.com",
+            "cloudinary.contoh-url-gambar-2.com",
+            "cloudinary.contoh-url-gambar-3.com"
+          ]
         },
         "createdAt": {
           "example": "2022-04-21T15:09:26.780Z"

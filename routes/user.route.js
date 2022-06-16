@@ -5,6 +5,6 @@ const auth = require("../middlewares/auth");
 // const UserRule = require("../validation/user.rule");
 const router = require("express").Router();
 
-router.put("/update", [auth], UserController.update);
+router.put("/", [auth], UserController.update);
 
 module.exports = router;

@@ -1,8 +1,7 @@
 const { User } = require("../models");
 const setResponse = require("../helper/response.helper");
 
-class UserControllers {
-  
+class UserController {
   static async update(req, res, next) {
     try {
       const user = await User.findOne({
@@ -33,4 +32,4 @@ class UserControllers {
     }
   }
 }
-module.exports = UserControllers;
+module.exports = UserController;
