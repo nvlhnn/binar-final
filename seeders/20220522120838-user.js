@@ -23,7 +23,7 @@ module.exports = {
           address: "catur tunggal, rt 2 rw 5 sleman yogyakarta",
           phone: 081221113868,
           email: "user@gmail.com",
-          password: bcrypt.hashSync("User123", salt),
+          password: bcrypt.hashSync("User1234567", salt),
           createdAt: new Date(),
           updatedAt: new Date(),
         },

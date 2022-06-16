@@ -5,11 +5,11 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "secondhand-3.herokuapp.com",
   "basePath": "/api",
   "tags": ["authentication", "user"],
 
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/auth/login": {
       "post": {
@@ -26,7 +26,7 @@
                   "example": "user@gmail.com"
                 },
                 "password": {
-                  "example": "User123"
+                  "example": "User726136"
                 }
               }
             }
@@ -113,7 +113,7 @@
                   "example": "user@gmail.com"
                 },
                 "password": {
-                  "example": "User123"
+                  "example": "User726136"
                 }
               }
             }
