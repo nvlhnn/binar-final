@@ -82,6 +82,27 @@ class ProductController {
     }
   }
 
-  static async getById(req, res, next) {}
+  static async getById(req, res, next) {
+    try {
+      // console.log(req.user)
+      const user = await Product.findOne({
+        where: {
+          id: req.user.id,
+        },
+      });
+      if (!user) {
+        throw {
+          status: 404,
+          message: "Product Not Found",
+        };
+      } else {
+        res.status(200).json(user);
+      }
+      const response = setResponse("success", products, null);
+      res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = ProductController;
