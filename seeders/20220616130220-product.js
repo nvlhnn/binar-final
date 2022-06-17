@@ -15,13 +15,20 @@ module.exports = {
       "Products",
       [
         {
-          name:"user",
-          price: " ",
-          categories:" ",
-          description:" ",
-          status: " " ,
-          seller: " ",
-          images: " ",
+          name:"Sea Stone",
+          price: "420000",
+          categories:[
+            "hobi",
+            "kesehatan"
+          ],
+          description:"Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
+          status: "published" ,
+          seller: "1",
+          images: [
+            "cloudinary.contoh-url-gambar-1.com",
+            "cloudinary.contoh-url-gambar-2.com",
+            "cloudinary.contoh-url-gambar-3.com"
+          ],
           createdAt: new Date(),
           updatedAt: new Date(),
         },

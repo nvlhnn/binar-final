@@ -85,20 +85,18 @@ class ProductController {
   static async getById(req, res, next) {
     try {
       // console.log(req.user)
-      const user = await Product.findOne({
+      const product = await Product.findOne({
         where: {
-          id: req.user.id,
+          id: req.params.productId,
         },
       });
-      if (!user) {
+      if (!product) {
         throw {
           status: 404,
-          message: "Product Not Found",
+          message: "Product not found",
         };
-      } else {
-        res.status(200).json(user);
       }
-      const response = setResponse("success", products, null);
+      const response = setResponse("success", product, null);
       res.status(200).json(response);
     } catch (err) {
       next(err);
