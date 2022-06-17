@@ -1,7 +1,7 @@
 const host =
   process.env.NODE_ENV == "development"
     ? "localhost:3000"
-    : "secondhand-3.herokuapp.com";
+    : "backend-secondhand-3.herokuapp.com";
 const schema = process.env.NODE_ENV == "development" ? ["http"] : ["https"];
 
 let swagger = {
