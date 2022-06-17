@@ -23,7 +23,7 @@ class UserController {
           },
           returning: true,
         });
-        console.log(updatedUser, req.body, req.user);
+        updatedUser[1][0].password = undefined;
         const response = setResponse("success", updatedUser[1][0], null);
         res.status(200).json(response);
       }

@@ -17,17 +17,19 @@ class AuthController {
 
         if (!user) {
           throw {
-            status: 401,
+            status: 400,
             message: "Invalid email or password",
           };
         }
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const token = generateJWT(user);
+          user.password = undefined;
+
           const response = setResponse("success", { user, token }, null);
           res.status(200).json(response);
         } else {
           throw {
-            status: 401,
+            status: 400,
             message: "Invalid email or password",
           };
         }
@@ -59,9 +61,9 @@ class AuthController {
         email: email,
         password: bcrypt.hashSync(password, salt),
       });
+      createdUser.password = undefined;
 
       const response = setResponse("success", createdUser, null);
-
       res.status(201).json(response);
     } catch (error) {
       next(error);

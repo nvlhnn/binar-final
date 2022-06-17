@@ -10,7 +10,10 @@ class ProductController {
         req.body.status = "published";
         req.body.sellerId = id;
 
-        const product = await Product.create(req.body, { transaction: t });
+        const product = await Product.create(req.body, {
+          include: ["seller"],
+          transaction: t,
+        });
         const notifBody = {
           productId: product.id,
           userId: id,
@@ -59,6 +62,20 @@ class ProductController {
       });
 
       const response = setResponse("success", products, null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async update(req, res, next) {
+    try {
+      const product = await Product.update(req.body, {
+        where: { id: req.params.productId },
+        returning: true,
+      });
+
+      const response = setResponse("success", product[1][0], null);
       res.status(200).json(response);
     } catch (error) {
       next(error);
