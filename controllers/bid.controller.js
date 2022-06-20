@@ -49,7 +49,18 @@ class BidController {
         const bid = await Bid.create(bidBody, {
           raw: true,
           transaction: t,
+          include: ["product"],
         });
+
+        // const testBid = await Bid.findOne({
+        //   where: { id: bid.id },
+        //   transaction: t,
+        //   include: ["product"],
+        // });
+
+        // console.log(bid);
+        // console.log(bid.id);
+        // console.log(testBid);
 
         // send notif bidding to buyer
         const biddingNotif = {
@@ -150,20 +161,6 @@ class BidController {
       next(err);
     }
   }
-
-  // static async getAllBidByProduct(req, res, next) {
-  //   try {
-  //     const { productId } = req.body;
-
-  //     const bids = await Bid.findAll({
-  //       where: { productId: productId },
-  //       include: ["buyer", "seller", "product"],
-  //     });
-
-  //     const response = setResponse(success, bids, null);
-  //     res.status(200).json(response);
-  //   } catch (error) {}
-  // }
 }
 module.exports = BidController;
 

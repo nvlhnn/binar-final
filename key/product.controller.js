@@ -68,9 +68,40 @@ class ProductController {
     }
   }
 
-  static async update(req, res, next) {}
+  static async update(req, res, next) {
+    try {
+      const product = await Product.update(req.body, {
+        where: { id: req.params.productId },
+        returning: true,
+      });
 
-  static async getById(req, res, next) {}
+      const response = setResponse("success", product[1][0], null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getById(req, res, next) {
+    try {
+      // console.log(req.user)
+      const product = await Product.findOne({
+        where: {
+          id: req.params.productId,
+        },
+      });
+      if (!product) {
+        throw {
+          status: 404,
+          message: "Product not found",
+        };
+      }
+      const response = setResponse("success", product, null);
+      res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
 
   static async getSellerProdutcs(req, res, next) {
     try {
@@ -100,6 +131,18 @@ class ProductController {
     }
   }
 
-  static async deleteProduct(req, res, next) {}
+  static async getSellerProductWithBids(req, res, next) {
+    // try {
+    //   const { productId } = req.params;
+    //   const product = await Product.findOne({
+    //     where: { id: productId, sellerId: req.user.id },
+    //     include: [{ model: Bid, as: "bids", include: ["buyer"], exclude:['productId', 'buyerId', 'sellerId', ] }],
+    //   });
+    //   const response = setResponse("success", product, null);
+    //   res.status(200).json(response);
+    // } catch (error) {
+    //   next(error);
+    // }
+  }
 }
 module.exports = ProductController;

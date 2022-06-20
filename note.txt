@@ -36,7 +36,7 @@ pertanyaan:
 -nama ada di register dan lengkapi akun
 -apakah buyer mendapat notifikasi saat penawaran ditolak?
 -kota/province?
--apakah daftar produk yang diminati itu per user bid, atau satu produk banyak bid?
+-apakah daftar produk yang diminati itu per user bid, atau satu produk banyak bid? per user bid
 -how to get assocition on create?
 -how to change passport response format?
 

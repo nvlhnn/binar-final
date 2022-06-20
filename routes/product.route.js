@@ -9,6 +9,11 @@ router.get("/:productId", productController.getById);
 router.get("/", productController.getAll);
 router.post("/", [auth, verified], productController.create);
 router.put("/:productId", [auth, isSeller, verified], productController.update);
+router.delete(
+  "/:productId",
+  [auth, isSeller, verified],
+  productController.deleteProduct
+);
 // router.get(
 //   "/:productId/bid",
 //   [auth, isSeller],
