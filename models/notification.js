@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "user",
       });
-      this.belongsTo(models.User, {
+      this.belongsTo(models.Bid, {
+        foreignKey: "bidId",
+        as: "bid",
+      });
+      this.belongsTo(models.Notification, {
         foreignKey: "productId",
         as: "product",
       });
@@ -20,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Notification.init(
     {
+      bidId: DataTypes.INTEGER,
       productId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
-      bidPrice: DataTypes.DECIMAL,
       isRead: DataTypes.BOOLEAN,
       status: DataTypes.ENUM("published", "bidIn", "bidding", "bidAccepted"),
     },

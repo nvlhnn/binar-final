@@ -14,11 +14,15 @@ api product
 - get seller products
 - get seller products have bids
 - get seller products sold
+- get all products with bids or sold or all for seller - on api products
+- get product with bids for seller
 
 api bids 
 - buyer melakukan bid | mengirim notifikasi bid_in untuk seller dan bidding untuk buyer
 - seller menerima bid | mengirim notifikasi bid_accepted untuk buyer
 - seller menolak bid 
+
+
 
 api notification
 - get all notification by user
@@ -27,12 +31,15 @@ api notification
 
 
 pertanyaan:
--apakah buyer mendapat notifikasi saat penawaran ditolak?
--apakah ketika icon notidikasi d klik otomatis hilang atau satu satu ?
+-apakah ketika icon notidikasi d klik otomatis hilang atau satu satu
 -apakah seller bisa edit barang
--kota/province ?
 -nama ada di register dan lengkapi akun
--apakah kategori produk perlu table baru
+-apakah buyer mendapat notifikasi saat penawaran ditolak?
+-kota/province?
+-apakah daftar produk yang diminati itu per user bid, atau satu produk banyak bid?
+-how to get assocition on create?
+-how to change passport response format?
+
 
 -onesignal
 -firebase

@@ -1,28 +1,27 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Notifications", {
+    await queryInterface.createTable("Bids", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      bidId: {
-        type: Sequelize.INTEGER,
-      },
       productId: {
         type: Sequelize.INTEGER,
       },
-      userId: {
+      buyerId: {
         type: Sequelize.INTEGER,
       },
-      isRead: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+      sellerId: {
+        type: Sequelize.INTEGER,
+      },
+      bidPrice: {
+        type: Sequelize.DECIMAL,
       },
       status: {
-        type: Sequelize.ENUM("published", "bidIn", "bidding", "bidAccepted"),
+        type: Sequelize.ENUM("pending", "accepted", "declined"),
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Notifications");
+    await queryInterface.dropTable("Bids");
   },
 };

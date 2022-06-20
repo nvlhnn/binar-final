@@ -1,4 +1,4 @@
-const { User, Product, sequelize, Notification } = require("../models");
+const { User, Product, sequelize, Notification, Bid } = require("../models");
 const setResponse = require("../helper/response.helper");
 const { Op } = require("sequelize");
 
@@ -101,6 +101,46 @@ class ProductController {
     } catch (err) {
       next(err);
     }
+  }
+
+  static async getSellerProdutcs(req, res, next) {
+    try {
+      const userId = req.user.id;
+
+      const filter = { sellerId: userId };
+
+      if (req.query.type == "bidded") {
+        filter["$bids.status$"] = "pending";
+      } else if (req.query.type == "sold") {
+        filter.status = "sold";
+      }
+
+      console.log(req.query, filter);
+
+      const products = await Product.findAll({
+        include: ["bids"],
+        where: filter,
+      });
+
+      const response = setResponse("success", products, null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getSellerProductWithBids(req, res, next) {
+    // try {
+    //   const { productId } = req.params;
+    //   const product = await Product.findOne({
+    //     where: { id: productId, sellerId: req.user.id },
+    //     include: [{ model: Bid, as: "bids", include: ["buyer"], exclude:['productId', 'buyerId', 'sellerId', ] }],
+    //   });
+    //   const response = setResponse("success", product, null);
+    //   res.status(200).json(response);
+    // } catch (error) {
+    //   next(error);
+    // }
   }
 }
 module.exports = ProductController;
