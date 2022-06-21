@@ -13,7 +13,7 @@ let swagger = {
   },
   host: host,
   basePath: "/api",
-  tags: ["authentication", "user", "product"],
+  tags: ["authentication", "user", "product", "Bid"],
 
   schemes: schema,
   paths: {
@@ -523,6 +523,9 @@ let swagger = {
                     name: {
                       example: "Sea Stone",
                     },
+                    slug: {
+                      example: "sea-stone",
+                    },
                     price: {
                       example: 420000,
                     },
@@ -636,10 +639,10 @@ let swagger = {
         ],
       },
     },
-    "/products/{productId}": {
+    "/products/{productSlug}": {
       get: {
         tags: ["product"],
-        summary: "get product by id",
+        summary: "get product by slug",
         parameters: [
           {
             name: "productId",
@@ -665,6 +668,23 @@ let swagger = {
               },
             },
           },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Product not found",
+                },
+              },
+            },
+          },
           500: {
             description: "Internal Server Error",
             schema: {
@@ -684,9 +704,11 @@ let swagger = {
           },
         },
       },
+    },
+    "products/{productId}": {
       put: {
         tags: ["product"],
-        summary: "update product",
+        summary: "update product by id",
         parameters: [
           {
             name: "productId",
@@ -746,6 +768,9 @@ let swagger = {
                     },
                     name: {
                       example: "Sea Stone",
+                    },
+                    slug: {
+                      example: "sea-stone",
                     },
                     price: {
                       example: 420000,
@@ -877,6 +902,282 @@ let swagger = {
         ],
       },
     },
+    "bids/user/{buyerId}": {
+      get: {
+        tags: ["Bid"],
+        summary: "get all buyer bids by buyerId",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      example: 1,
+                    },
+                    photoProfil: {
+                      example: "cloudinary.contoh-url-gambar-1.com",
+                    },
+                    name: {
+                      example: "user",
+                    },
+                    email: {
+                      example: "user@gmail.com",
+                    },
+                    city: {
+                      example: "yogyakarta",
+                    },
+                    address: {
+                      example: "catur tunggal, rt 2 rw 5 sleman yogyakarta",
+                    },
+                  },
+                },
+                message: {
+                  example: "Success bidding product",
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Buyer id is seller id",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Invalid buyerId",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
+    "bids/product/{productId}": {
+      post: {
+        tags: ["Bid"],
+        summary: "bid a product by product's id",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+          },
+          {
+            name: "body",
+            in: "body",
+            schema: {
+              type: "object",
+              properties: {
+                bidPrice: {
+                  example: 40000,
+                },
+              },
+            },
+          },
+        ],
+        responses: {
+          201: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Success bidding product",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Bad Request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: ["Bidprice is required", "Price is required"],
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Bidder is product's seller",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "User already bidding this product",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Product not found",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
   },
   securityDefinitions: {
     Authorization: {
@@ -919,6 +1220,26 @@ let swagger = {
         },
       },
     },
+    Bid: {
+      type: "object",
+      properties: {
+        id: {
+          example: 1,
+        },
+        buyer: {
+          $ref: "#/definitions/User",
+        },
+        product: {
+          $ref: "#/definitions/Product",
+        },
+        bidPrice: {
+          example: 400000,
+        },
+        status: {
+          example: "pending",
+        },
+      },
+    },
     Product: {
       type: "object",
       properties: {
@@ -927,6 +1248,9 @@ let swagger = {
         },
         name: {
           example: "Sea Stone",
+        },
+        slug: {
+          example: "sea-stone",
         },
         price: {
           example: 420000,

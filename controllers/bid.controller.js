@@ -17,8 +17,8 @@ class BidController {
         // check if bider is seller
         if (product.sellerId == req.user.id) {
           throw {
-            status: 400,
-            message: "bidder is product's seller",
+            status: 403,
+            message: "Bidder is product's seller",
           };
         }
 
@@ -33,7 +33,7 @@ class BidController {
 
         if (bidExist) {
           throw {
-            status: 400,
+            status: 403,
             message: "User already bidding this product",
           };
         }
@@ -89,7 +89,7 @@ class BidController {
         const response = setResponse(
           "success",
           null,
-          "success bidding product"
+          "Success bidding product"
         );
 
         res.status(200).json(response);

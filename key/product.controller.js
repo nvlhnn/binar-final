@@ -1,6 +1,7 @@
 const { User, Product, sequelize, Notification, Bid } = require("../models");
 const setResponse = require("../helper/response.helper");
 const { Op } = require("sequelize");
+const generateSlug = require("../helper/slug.helper");
 
 class ProductController {
   static async create(req, res, next) {
@@ -70,6 +71,8 @@ class ProductController {
 
   static async update(req, res, next) {
     try {
+      if (req.body.name) req.body.slug = generateSlug(req.body.name);
+
       const product = await Product.update(req.body, {
         where: { id: req.params.productId },
         returning: true,

@@ -10,7 +10,11 @@ router.put(
   [auth, validate(updateRule)],
   BidController.updateBidStatus
 );
-router.post("/:productId", [auth, validate(createRule)], BidController.bidding);
+router.post(
+  "product/:productId",
+  [auth, validate(createRule)],
+  BidController.bidding
+);
 // router.get("/:productId", [auth, isSeller], BidController.getAllBidByProduct);
 
 module.exports = router;

@@ -8,7 +8,7 @@ class NotificationController {
       const notifs = await Notification.findAll({
         where: { userId: req.user.id, isRead: false },
         include: ["product", "bid"],
-        order: [["createdAt", "DESC"]],
+        order: [["createdAt", "ASC"]],
       });
 
       const response = setResponse("success", notifs, null);
@@ -17,6 +17,7 @@ class NotificationController {
       next(err);
     }
   }
+
   static async updateNotifsRead(req, res, next) {
     try {
       const { id } = req.body;

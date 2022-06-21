@@ -44,6 +44,7 @@ class ProductController {
 
       let filter = {};
       const arr = [];
+
       if (req.query.page) offset = (req.query.page - 1) * limit;
       if (req.query.search)
         filter.name = { [Op.iLike]: `%${req.query.search}%` };
@@ -61,6 +62,7 @@ class ProductController {
         limit: limit,
         offset: offset,
         include: "seller",
+        order: [["createdAt", "ASC"]],
       });
 
       const response = setResponse("success", products, null);
