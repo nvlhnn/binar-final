@@ -1,6 +1,7 @@
 const { User, Product, sequelize, Notification, Bid } = require("../models");
 const setResponse = require("../helper/response.helper");
 const { Op } = require("sequelize");
+const generateSlug = require("../helper/slug.helper");
 
 class ProductController {
   static async create(req, res, next) {
@@ -9,6 +10,7 @@ class ProductController {
         const { id } = req.user;
         req.body.status = "published";
         req.body.sellerId = id;
+        req.body.slug = generateSlug(req.body.name);
 
         const product = await Product.create(req.body, {
           include: ["seller"],
@@ -70,7 +72,7 @@ class ProductController {
 
   static async update(req, res, next) {}
 
-  static async getById(req, res, next) {}
+  static async getBySlug(req, res, next) {}
 
   static async getSellerProdutcs(req, res, next) {
     try {

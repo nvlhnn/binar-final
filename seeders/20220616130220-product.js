@@ -1,5 +1,7 @@
 "use strict";
 
+const generateSlug = require("../helper/slug.helper");
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -16,6 +18,7 @@ module.exports = {
       [
         {
           name: "Sea Stone",
+          slug: generateSlug("Sea Stone"),
           price: "420000",
           categories: ["hobi", "kesehatan"],
           description:
