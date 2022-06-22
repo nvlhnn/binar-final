@@ -11,7 +11,7 @@ router.put(
   BidController.updateBidStatus
 );
 router.post(
-  "product/:productId",
+  "/product/:productId",
   [auth, validate(createRule)],
   BidController.bidding
 );

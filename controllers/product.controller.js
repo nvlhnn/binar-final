@@ -90,7 +90,6 @@ class ProductController {
         filter.status = "sold";
       }
 
-      console.log(include);
 
       const products = await Product.findAll({
         where: filter,
