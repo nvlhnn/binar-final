@@ -124,7 +124,7 @@ class BidController {
         // check bid status is not pending
         if (bid.status != "pending") {
           throw {
-            status: 400,
+            status: 403,
             message: "Can't update this bid status",
           };
         }
@@ -159,6 +159,62 @@ class BidController {
       });
     } catch (err) {
       next(err);
+    }
+  }
+
+  static async getBuyerBids(req, res, next) {
+    try {
+      if (req.params.buyerId == req.user.id) {
+        throw {
+          status: 403,
+          message: "Buyer id is user id",
+        };
+      }
+
+      const buyer = await User.findOne({
+        where: { id: req.params.buyerId },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+        // order: [[{ model: Bid, as: "bids" }, "id", "desc"]],
+      });
+
+      if (!buyer) {
+        throw {
+          status: 404,
+          message: "Invalid buyer id",
+        };
+      }
+
+      const bids = await Bid.findAll({
+        where: { sellerId: req.user.id, buyerId: req.params.buyerId },
+        include: [
+          {
+            model: Product,
+            as: "product",
+            attributes: {
+              exclude: ["buyerId", "sellerId", "createdAt", "updatedAt"],
+            },
+          },
+        ],
+        order: [
+          ["status", "ASC"],
+          ["createdAt", "DESC"],
+        ],
+        attributes: {
+          exclude: [
+            "productId",
+            "buyerId",
+            "sellerId",
+            "createdAt",
+            "updatedAt",
+          ],
+        },
+      });
+
+      console.log(bids);
+      const response = setResponse("success", { buyer, bids }, null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
     }
   }
 }

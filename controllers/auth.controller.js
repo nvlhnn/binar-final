@@ -13,6 +13,7 @@ class AuthController {
           where: {
             email: req.body.email,
           },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         });
 
         if (!user) {
@@ -62,8 +63,10 @@ class AuthController {
         password: bcrypt.hashSync(password, salt),
       });
       createdUser.password = undefined;
+      createdUser.createdAt = undefined;
+      createdUser.updatedAt = undefined;
 
-      const response = setResponse("success", createdUser, null);
+      const response = setResponse("success", null, "Register user success");
       res.status(201).json(response);
     } catch (error) {
       next(error);

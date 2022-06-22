@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "bidId",
         as: "bid",
       });
-      this.belongsTo(models.Notification, {
+      this.belongsTo(models.Product, {
         foreignKey: "productId",
         as: "product",
       });

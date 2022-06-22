@@ -38,6 +38,7 @@ class UserController {
         where: {
           id: req.user.id,
         },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
       });
 
       if (!user) {
@@ -46,6 +47,7 @@ class UserController {
           message: "User not found",
         };
       }
+
       const response = setResponse("success", user, null);
       res.status(200).json(response);
     } catch (err) {

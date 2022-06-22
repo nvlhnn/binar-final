@@ -6,7 +6,7 @@ const verified = require("../middlewares/verified");
 const { createRule } = require("../validation/product.scheme.js");
 const validate = require("../validation/validator.js");
 
-router.get("/seller", [auth], productController.getSellerProdutcs);
+router.get("/seller", [auth, verified], productController.getSellerProdutcs);
 router.get("/:productSlug", productController.getBySlug);
 router.get("/", productController.getAll);
 router.post(

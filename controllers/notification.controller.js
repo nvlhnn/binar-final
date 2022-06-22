@@ -1,4 +1,4 @@
-const { User, Notification } = require("../models");
+const { User, Notification, Product, Bid } = require("../models");
 const setResponse = require("../helper/response.helper");
 const { Op } = require("sequelize");
 
@@ -7,8 +7,124 @@ class NotificationController {
     try {
       const notifs = await Notification.findAll({
         where: { userId: req.user.id, isRead: false },
-        include: ["product", "bid"],
+        include: [
+          {
+            model: Product,
+            as: "product",
+            attributes: {
+              exclude: ["sellerId", "createdAt", "updatedAt"],
+            },
+            include: [
+              {
+                model: User,
+                as: "seller",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+            ],
+          },
+          {
+            model: Bid,
+            as: "bid",
+            attributes: {
+              exclude: [
+                "sellerId",
+                "buyerId",
+                "productId",
+                "createdAt",
+                "updatedAt",
+              ],
+            },
+            include: [
+              {
+                model: User,
+                as: "seller",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+              {
+                model: User,
+                as: "buyer",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+            ],
+          },
+        ],
         order: [["createdAt", "ASC"]],
+        attributes: {
+          exclude: ["bidId", "productId", "createdAt", "updatedAt", "userId"],
+        },
+      });
+
+      const response = setResponse("success", notifs, null);
+      res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async getAllUserNotifs(req, res, next) {
+    try {
+      const notifs = await Notification.findAll({
+        where: { userId: req.user.id },
+        include: [
+          {
+            model: Product,
+            as: "product",
+            attributes: {
+              exclude: ["sellerId", "createdAt", "updatedAt"],
+            },
+            include: [
+              {
+                model: User,
+                as: "seller",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+            ],
+          },
+          {
+            model: Bid,
+            as: "bid",
+            attributes: {
+              exclude: [
+                "sellerId",
+                "buyerId",
+                "productId",
+                "createdAt",
+                "updatedAt",
+              ],
+            },
+            include: [
+              {
+                model: User,
+                as: "seller",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+              {
+                model: User,
+                as: "buyer",
+                attributes: {
+                  exclude: ["password", "createdAt", "updatedAt"],
+                },
+              },
+            ],
+          },
+        ],
+        order: [
+          ["isRead", "ASC"],
+          ["createdAt", "DESC"],
+        ],
+        attributes: {
+          exclude: ["bidId", "productId", "createdAt", "updatedAt", "userId"],
+        },
       });
 
       const response = setResponse("success", notifs, null);
@@ -22,12 +138,12 @@ class NotificationController {
     try {
       const { id } = req.body;
 
-      if (!id) {
-        throw {
-          status: 400,
-          message: "Required id in body",
-        };
-      }
+      // if (!id) {
+      //   throw {
+      //     status: 400,
+      //     message: "Required id in body",
+      //   };
+      // }
 
       const notifs = await Notification.findAll({
         where: {
@@ -41,15 +157,15 @@ class NotificationController {
 
       if (invalidId.length > 0) {
         throw {
-          status: 400,
+          status: 403,
           message: "Invalid id. Cant update other user's notifications ",
         };
       }
 
-      await Notification.update(
+      const test = await Notification.update(
         { isRead: true },
         {
-          where: { userId: { [Op.in]: id } },
+          where: { id: { [Op.in]: id } },
         }
       );
 

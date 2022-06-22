@@ -16,6 +16,7 @@ class ProductController {
           include: ["seller"],
           transaction: t,
         });
+
         const notifBody = {
           productId: product.id,
           userId: id,
@@ -24,11 +25,6 @@ class ProductController {
         await Notification.create(notifBody, { transaction: t });
 
         const response = setResponse("success", product, null);
-
-        // const test = await User.findOne({
-        //   where: { id: 1 },
-        //   include: ["notifications"],
-        // });
 
         res.status(201).json(response);
       });
@@ -42,8 +38,9 @@ class ProductController {
       let limit = 24;
       let offset = 0;
 
-      let filter = {};
+      let filter = { status: "published" };
       const arr = [];
+      let sort;
 
       if (req.query.page) offset = (req.query.page - 1) * limit;
       if (req.query.search)
@@ -57,12 +54,45 @@ class ProductController {
         filter.categories = { [Op.or]: arr };
       }
 
+      if (req.query.sort) {
+        switch (req.query.sort) {
+          case "latest":
+            sort = ["createdAt", "DESC"];
+            break;
+          case "oldest":
+            sort = ["createdAt", "ASC"];
+            break;
+          case "cheapest":
+            sort = ["price", "ASC"];
+            break;
+          case "expensive":
+            sort = ["price", "DESC"];
+            break;
+          default:
+            sort = ["createdAt", "DESC"];
+            break;
+        }
+      } else {
+        sort = ["createdAt", "DESC"];
+      }
+
+      if (req.query.sellerId) {
+        filter.sellerId = { [Op.ne]: req.body.sellerId };
+      }
+
       const products = await Product.findAll({
         where: filter,
         limit: limit,
         offset: offset,
-        include: "seller",
-        order: [["createdAt", "ASC"]],
+        include: [
+          {
+            model: User,
+            as: "seller",
+            attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+          },
+        ],
+        order: [sort],
+        attributes: { exclude: ["sellerId", "createdAt", "updatedAt"] },
       });
 
       const response = setResponse("success", products, null);
@@ -73,18 +103,19 @@ class ProductController {
   }
 
   static async update(req, res, next) {
-    // try {
-    //   const product = await Product.update(req.body, {
-    //     where: {
-    //       userId: req.user.id
-    //     }
-    //   })
-    //   res.status(200).json({
-    //     message: 'Successfully update'
-    //   })
-    // } catch(err) {
-    //   next(err)
-    // }
+    try {
+      if (req.body.name) req.body.slug = generateSlug(req.body.name);
+
+      const product = await Product.update(req.body, {
+        where: { id: req.params.productId },
+        returning: true,
+      });
+
+      const response = setResponse("success", product[1][0], null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async getBySlug(req, res, next) {
@@ -95,13 +126,23 @@ class ProductController {
         where: {
           slug: slug,
         },
+        include: [
+          {
+            model: User,
+            as: "seller",
+            attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+          },
+        ],
+        attributes: { exclude: ["sellerId", "createdAt", "updatedAt"] },
       });
+
       if (!product) {
         throw {
           status: 404,
           message: "Product not found",
         };
       }
+
       const response = setResponse("success", product, null);
       res.status(200).json(response);
     } catch (error) {
@@ -118,15 +159,34 @@ class ProductController {
 
       if (req.query.type == "bidded") {
         filter["$bids.status$"] = "pending";
-        include.push("bids");
+        const bidAssociation = {
+          model: Bid,
+          as: "bids",
+          where: { status: "pending" },
+          include: {
+            model: User,
+            as: "buyer",
+            attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+          },
+          attributes: {
+            exclude: [
+              "productId",
+              "buyerId",
+              "sellerId",
+              "createdAt",
+              "updatedAt",
+            ],
+          },
+        };
+        include.push(bidAssociation);
       } else if (req.query.type == "sold") {
         filter.status = "sold";
       }
 
-
       const products = await Product.findAll({
         where: filter,
         include: include,
+        attributes: { exclude: ["sellerId", "createdAt", "updatedAt"] },
       });
 
       const response = setResponse("success", products, null);

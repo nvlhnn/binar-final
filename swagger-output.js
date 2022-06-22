@@ -1,6 +1,8 @@
 const host =
   process.env.NODE_ENV == "development"
     ? "localhost:3000"
+    : process.env.PROD_ENV == "staging"
+    ? "ancient-everglades-98776.herokuapp.com"
     : "backend-secondhand-3.herokuapp.com";
 const schema = process.env.NODE_ENV == "development" ? ["http"] : ["https"];
 
@@ -13,7 +15,7 @@ let swagger = {
   },
   host: host,
   basePath: "/api",
-  tags: ["authentication", "user", "product", "Bid"],
+  tags: ["authentication", "user", "product", "bid", "notification"],
 
   schemes: schema,
   paths: {
@@ -54,7 +56,8 @@ let swagger = {
                       $ref: "#/definitions/User",
                     },
                     token: {
-                      example: "$iqwuiqn187@%n.19281928tgajbsd.12jn1i2x8",
+                      example:
+                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY1NTkxODI1NX0.34sbx39M_ds7zgZlfu4kFe9ZBSXM5GO-C8A2SmomnME",
                     },
                   },
                 },
@@ -135,39 +138,10 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  type: "object",
-                  properties: {
-                    id: {
-                      example: 1,
-                    },
-                    name: {
-                      example: "user",
-                    },
-                    email: {
-                      example: "user@gmail.com",
-                    },
-                    createdAt: {
-                      example: "2022-04-21T15:09:26.780Z",
-                    },
-                    updatedAt: {
-                      example: "2022-04-21T15:09:26.780Z",
-                    },
-                    ciry: {
-                      example: null,
-                    },
-                    address: {
-                      example: null,
-                    },
-                    phone: {
-                      example: null,
-                    },
-                    verified: {
-                      example: null,
-                    },
-                  },
+                  example: null,
                 },
                 message: {
-                  example: null,
+                  example: "Register user success",
                 },
               },
             },
@@ -221,6 +195,7 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
           },
         ],
         responses: {
@@ -290,6 +265,7 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
           },
           {
             name: "body",
@@ -299,6 +275,9 @@ let swagger = {
               properties: {
                 name: {
                   example: "user",
+                },
+                profilePicture: {
+                  example: "cloudinary.contoh-url-gambar-1.com",
                 },
                 city: {
                   example: "yogyakarta",
@@ -323,36 +302,7 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  type: "object",
-                  properties: {
-                    id: {
-                      example: 1,
-                    },
-                    name: {
-                      example: "user",
-                    },
-                    email: {
-                      example: "user@gmail.com",
-                    },
-                    city: {
-                      example: "yogyakarta",
-                    },
-                    address: {
-                      example: "catur tunggal, rt 2 rw 5 sleman yogyakarta",
-                    },
-                    phone: {
-                      example: "0811221113868",
-                    },
-                    verified: {
-                      example: true,
-                    },
-                    createdAt: {
-                      example: "2022-04-21T15:09:26.780Z",
-                    },
-                    updatedAt: {
-                      example: "2022-04-21T15:09:26.780Z",
-                    },
-                  },
+                  $ref: "#/definitions/User",
                 },
                 message: {
                   example: null,
@@ -420,6 +370,19 @@ let swagger = {
             description: "filter by product categories in array",
           },
           {
+            name: "sort",
+            in: "query",
+            type: "string",
+            description:
+              "sort product by certain key like 'latest', 'oldest', 'cheapest', 'expensive'",
+          },
+          {
+            name: "sellerId",
+            in: "query",
+            type: "string",
+            description: "get all product withou the seller or user product",
+          },
+          {
             name: "page",
             in: "query",
             type: "string",
@@ -474,6 +437,7 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
           },
           {
             name: "body",
@@ -485,7 +449,7 @@ let swagger = {
                   example: "Sea Stone",
                 },
                 price: {
-                  example: 420000,
+                  example: "420000",
                 },
                 categories: {
                   example: ["hobi", "kesehatan"],
@@ -527,7 +491,7 @@ let swagger = {
                       example: "sea-stone",
                     },
                     price: {
-                      example: 420000,
+                      example: "420000",
                     },
                     categories: {
                       example: ["hobi", "kesehatan"],
@@ -645,8 +609,9 @@ let swagger = {
         summary: "get product by slug",
         parameters: [
           {
-            name: "productId",
+            name: "productSlug",
             in: "path",
+            required: true,
             type: "string",
           },
         ],
@@ -705,7 +670,7 @@ let swagger = {
         },
       },
     },
-    "products/{productId}": {
+    "/products/{productId}": {
       put: {
         tags: ["product"],
         summary: "update product by id",
@@ -720,6 +685,7 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
           },
           {
             name: "body",
@@ -731,7 +697,7 @@ let swagger = {
                   example: "Sea Stone",
                 },
                 price: {
-                  example: 420000,
+                  example: "420000",
                 },
                 categories: {
                   example: ["hobi", "kesehatan"],
@@ -773,7 +739,7 @@ let swagger = {
                       example: "sea-stone",
                     },
                     price: {
-                      example: 420000,
+                      example: "420000",
                     },
                     categories: {
                       example: ["hobi", "kesehatan"],
@@ -902,15 +868,22 @@ let swagger = {
         ],
       },
     },
-    "bids/user/{buyerId}": {
+    "/products/seller": {
       get: {
-        tags: ["Bid"],
-        summary: "get all buyer bids by buyerId",
+        tags: ["product"],
+        summary: "get all seller's products",
         parameters: [
+          {
+            name: "type",
+            in: "query",
+            type: "string",
+            description: "filter product 'bidded' or 'sold'",
+          },
           {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
           },
         ],
         responses: {
@@ -923,30 +896,69 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  type: "object",
-                  properties: {
-                    id: {
-                      example: 1,
-                    },
-                    photoProfil: {
-                      example: "cloudinary.contoh-url-gambar-1.com",
-                    },
-                    name: {
-                      example: "user",
-                    },
-                    email: {
-                      example: "user@gmail.com",
-                    },
-                    city: {
-                      example: "yogyakarta",
-                    },
-                    address: {
-                      example: "catur tunggal, rt 2 rw 5 sleman yogyakarta",
-                    },
+                  type: "array",
+                  items: {
+                    oneOf: [
+                      { $ref: "#/definitions/Product" },
+                      {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: 2,
+                          },
+                          name: {
+                            example: "Sea Stone",
+                          },
+                          slug: {
+                            example: "sea-stone",
+                          },
+                          price: {
+                            example: "420000",
+                          },
+                          categories: {
+                            example: ["hobi", "kesehatan"],
+                          },
+                          description: {
+                            example:
+                              "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
+                          },
+                          status: {
+                            example: "published",
+                          },
+                          images: {
+                            example: [
+                              "cloudinary.contoh-url-gambar-1.com",
+                              "cloudinary.contoh-url-gambar-2.com",
+                              "cloudinary.contoh-url-gambar-3.com",
+                            ],
+                          },
+                          bids: {
+                            type: "array",
+                            items: {
+                              type: "object",
+                              properties: {
+                                id: {
+                                  example: 1,
+                                },
+                                buyer: {
+                                  $ref: "#/definitions/User",
+                                },
+                                bidPrice: {
+                                  example: "420000",
+                                },
+                                status: {
+                                  example: "pending",
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    ],
                   },
                 },
                 message: {
-                  example: "Success bidding product",
+                  example: null,
                 },
               },
             },
@@ -980,24 +992,7 @@ let swagger = {
                   example: null,
                 },
                 message: {
-                  example: "Buyer id is seller id",
-                },
-              },
-            },
-          },
-          404: {
-            description: "Resource not found",
-            schema: {
-              type: "object",
-              properties: {
-                status: {
-                  example: "error",
-                },
-                data: {
-                  example: null,
-                },
-                message: {
-                  example: "Invalid buyerId",
+                  example: "User not verified",
                 },
               },
             },
@@ -1027,15 +1022,190 @@ let swagger = {
         ],
       },
     },
-    "bids/product/{productId}": {
-      post: {
-        tags: ["Bid"],
-        summary: "bid a product by product's id",
+    "/bids/user/{buyerId}": {
+      get: {
+        tags: ["bid"],
+        summary: "get all buyer bids by buyerId",
         parameters: [
+          {
+            name: "buyerId",
+            in: "path",
+            required: true,
+            type: "string",
+          },
           {
             name: "Authorization",
             in: "header",
             type: "string",
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  type: "object",
+                  properties: {
+                    buyer: {
+                      $ref: "#/definitions/User",
+                    },
+                    bids: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: 1,
+                          },
+                          bidPrice: {
+                            example: "420000",
+                          },
+                          status: {
+                            example: "pending",
+                          },
+                          product: {
+                            type: "object",
+                            properties: {
+                              id: {
+                                example: 1,
+                              },
+                              name: {
+                                example: "Sea Stone",
+                              },
+                              slug: {
+                                example: "sea-stone",
+                              },
+                              price: {
+                                example: "420000",
+                              },
+                              categories: {
+                                example: ["hobi", "kesehatan"],
+                              },
+                              description: {
+                                example:
+                                  "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
+                              },
+                              status: {
+                                example: "published",
+                              },
+                              images: {
+                                example: [
+                                  "cloudinary.contoh-url-gambar-1.com",
+                                  "cloudinary.contoh-url-gambar-2.com",
+                                  "cloudinary.contoh-url-gambar-3.com",
+                                ],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                message: {
+                  example: null,
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Buyer id is user id",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Invalid buyer id",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
+    "/bids/product/{productId}": {
+      post: {
+        tags: ["bid"],
+        summary: "bid a product by product's id",
+        parameters: [
+          {
+            name: "productId",
+            in: "path",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            required: true,
           },
           {
             name: "body",
@@ -1044,7 +1214,7 @@ let swagger = {
               type: "object",
               properties: {
                 bidPrice: {
-                  example: 40000,
+                  example: "420000",
                 },
               },
             },
@@ -1080,7 +1250,7 @@ let swagger = {
                   example: null,
                 },
                 message: {
-                  example: ["Bidprice is required", "Price is required"],
+                  example: ["Bidprice is required"],
                 },
               },
             },
@@ -1178,7 +1348,515 @@ let swagger = {
         ],
       },
     },
+    "/bids/{bidId}": {
+      put: {
+        tags: ["bid"],
+        summary: "update bid status 'accepted' or 'declined'",
+        parameters: [
+          {
+            name: "bidId",
+            in: "path",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "body",
+            in: "body",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "accepted",
+                },
+              },
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Success update bid",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Bad Request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: ["status is required"],
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Can't update this bid status",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "User is not the product's seller",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Bid not found",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
+    "/notifications/all": {
+      get: {
+        tags: ["notification"],
+        summary: "get all notification. For mobile",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  type: "array",
+                  items: {
+                    oneOf: [
+                      {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: "1",
+                          },
+                          isRead: {
+                            example: false,
+                          },
+                          status: {
+                            example: "bidIn",
+                          },
+                          product: {
+                            $ref: "#/definitions/Product",
+                          },
+                          bid: {
+                            type: "object",
+                            properties: {
+                              id: {
+                                example: "1",
+                              },
+                              bidPrice: {
+                                example: "450000",
+                              },
+                              status: {
+                                example: "pending",
+                              },
+                              seller: {
+                                $ref: "#/definitions/User",
+                              },
+                              buyer: {
+                                $ref: "#/definitions/User",
+                              },
+                            },
+                          },
+                        },
+                      },
+                      {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: "1",
+                          },
+                          isRead: {
+                            example: false,
+                          },
+                          status: {
+                            example: "published",
+                          },
+                          product: {
+                            $ref: "#/definitions/Product",
+                          },
+                          bid: {
+                            example: null,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+                message: {
+                  example: null,
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
+    "/notifications/": {
+      get: {
+        tags: ["notification"],
+        summary: "get all notification where not read yet. For desktop",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  type: "array",
+                  items: {
+                    oneOf: [
+                      {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: "1",
+                          },
+                          isRead: {
+                            example: false,
+                          },
+                          status: {
+                            example: "bidIn",
+                          },
+                          product: {
+                            $ref: "#/definitions/Product",
+                          },
+                          bid: {
+                            type: "object",
+                            properties: {
+                              id: {
+                                example: "1",
+                              },
+                              bidPrice: {
+                                example: "450000",
+                              },
+                              status: {
+                                example: "pending",
+                              },
+                              seller: {
+                                $ref: "#/definitions/User",
+                              },
+                              buyer: {
+                                $ref: "#/definitions/User",
+                              },
+                            },
+                          },
+                        },
+                      },
+                      {
+                        type: "object",
+                        properties: {
+                          id: {
+                            example: "1",
+                          },
+                          isRead: {
+                            example: false,
+                          },
+                          status: {
+                            example: "published",
+                          },
+                          product: {
+                            $ref: "#/definitions/Product",
+                          },
+                          bid: {
+                            example: null,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+                message: {
+                  example: null,
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+      put: {
+        tags: ["notification"],
+        summary: "update bid status 'accepted' or 'declined'",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "body",
+            in: "body",
+            schema: {
+              type: "object",
+              properties: {
+                id: {
+                  example: [1, 2],
+                },
+              },
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "success update notifications",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Bad Request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: ["Required id in body"],
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbidden request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example:
+                    "Invalid id. Cant update other user's notifications ",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
   },
+
   securityDefinitions: {
     Authorization: {
       type: "apiKey",
@@ -1200,6 +1878,9 @@ let swagger = {
         email: {
           example: "user@gmail.com",
         },
+        profilePicture: {
+          example: "cloudinary.contoh-url-profil.com",
+        },
         city: {
           example: "yogyakarta",
         },
@@ -1211,12 +1892,6 @@ let swagger = {
         },
         verified: {
           example: true,
-        },
-        createdAt: {
-          example: "2022-04-21T15:09:26.780Z",
-        },
-        updatedAt: {
-          example: "2022-04-21T15:09:26.780Z",
         },
       },
     },
@@ -1233,7 +1908,7 @@ let swagger = {
           $ref: "#/definitions/Product",
         },
         bidPrice: {
-          example: 400000,
+          example: "420000",
         },
         status: {
           example: "pending",
@@ -1253,7 +1928,7 @@ let swagger = {
           example: "sea-stone",
         },
         price: {
-          example: 420000,
+          example: "420000",
         },
         categories: {
           example: ["hobi", "kesehatan"],
@@ -1274,12 +1949,6 @@ let swagger = {
             "cloudinary.contoh-url-gambar-2.com",
             "cloudinary.contoh-url-gambar-3.com",
           ],
-        },
-        createdAt: {
-          example: "2022-04-21T15:09:26.780Z",
-        },
-        updatedAt: {
-          example: "2022-04-21T15:09:26.780Z",
         },
       },
     },

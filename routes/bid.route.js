@@ -3,6 +3,7 @@ const auth = require("../middlewares/auth");
 const validate = require("../validation/validator");
 const { createRule, updateRule } = require("../validation/bid.scheme");
 const isSeller = require("../middlewares/isSeller.js");
+const verified = require("../middlewares/verified.js");
 const router = require("express").Router();
 
 router.put(
@@ -15,6 +16,7 @@ router.post(
   [auth, validate(createRule)],
   BidController.bidding
 );
+router.get("/user/:buyerId", [auth, verified], BidController.getBuyerBids);
 // router.get("/:productId", [auth, isSeller], BidController.getAllBidByProduct);
 
 module.exports = router;
