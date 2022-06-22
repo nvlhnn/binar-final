@@ -72,9 +72,42 @@ class ProductController {
     }
   }
 
-  static async update(req, res, next) {}
+  static async update(req, res, next) {
+    // try {
+    //   const product = await Product.update(req.body, {
+    //     where: {
+    //       userId: req.user.id
+    //     }
+    //   })
+    //   res.status(200).json({
+    //     message: 'Successfully update'
+    //   })
+    // } catch(err) {
+    //   next(err)
+    // }
+  }
 
-  static async getBySlug(req, res, next) {}
+  static async getBySlug(req, res, next) {
+    try {
+      const slug = req.params.productSlug;
+
+      const product = await Product.findOne({
+        where: {
+          slug: slug,
+        },
+      });
+      if (!product) {
+        throw {
+          status: 404,
+          message: "Product not found",
+        };
+      }
+      const response = setResponse("success", product, null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async getSellerProdutcs(req, res, next) {
     try {
