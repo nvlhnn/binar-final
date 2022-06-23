@@ -24,6 +24,8 @@ class UserController {
           returning: true,
         });
         updatedUser[1][0].password = undefined;
+        updatedUser[1][0].createdAt = undefined;
+        updatedUser[1][0].updatedAt = undefined;
         const response = setResponse("success", updatedUser[1][0], null);
         res.status(200).json(response);
       }

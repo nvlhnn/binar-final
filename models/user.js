@@ -12,10 +12,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "notifications",
       });
-      this.hasMany(models.Product, {
-        foreignKey: "sellerId",
-        as: "products",
+      this.belongsToMany(models.Product, {
+        through: "Wishlists",
+        foreignKey: "userId",
+        otherKey: "productId",
+        // as: "wishlists",
       });
+      // this.hasMany(models.Product, {
+      //   foreignKey: "sellerId",
+      //   as: "products",
+      // });
       this.hasMany(models.Bid, {
         foreignKey: "buyerId",
         as: "bids",

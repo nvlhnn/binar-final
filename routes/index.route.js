@@ -2,10 +2,12 @@ const router = require("express").Router();
 
 const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
-const notificationRoute = require("./notification.route");
 const productRoute = require("./product.route");
 const bidRoute = require("./bid.route");
+const notificationRoute = require("./notification.route");
+const wishlistRoute = require("./wishlist.route");
 
+router.use("/wishlists", wishlistRoute);
 router.use("/notifications", notificationRoute);
 router.use("/users", userRoute);
 router.use("/auth", authRoute);
