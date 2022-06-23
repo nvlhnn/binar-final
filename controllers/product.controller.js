@@ -196,6 +196,18 @@ class ProductController {
     }
   }
 
-  static async deleteProduct(req, res, next) {}
+  static async deleteProduct(req, res, next) {
+    try {
+          await Product.destroy({
+            where: {
+              id: req.params.productId
+            }
+          })
+          const response=setResponse("success",null,"Product deleted")
+          res.status(200).json(response)
+    } catch(err) {
+      next(err)
+    } 
+  }
 }
 module.exports = ProductController;
