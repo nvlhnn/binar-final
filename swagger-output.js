@@ -195,7 +195,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
         ],
         responses: {
@@ -265,7 +264,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
@@ -437,7 +435,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
@@ -685,7 +682,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
@@ -883,7 +879,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
         ],
         responses: {
@@ -1037,7 +1032,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
         ],
         responses: {
@@ -1205,7 +1199,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
@@ -1363,7 +1356,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
@@ -1515,7 +1507,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
         ],
         responses: {
@@ -1631,7 +1622,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
         ],
         responses: {
@@ -1745,7 +1735,6 @@ let swagger = {
             name: "Authorization",
             in: "header",
             type: "string",
-            required: true,
           },
           {
             name: "body",
