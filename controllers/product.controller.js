@@ -2,15 +2,37 @@ const { User, Product, sequelize, Notification, Bid } = require("../models");
 const setResponse = require("../helper/response.helper");
 const { Op } = require("sequelize");
 const generateSlug = require("../helper/slug.helper");
+const cloudinary = require("../services/cloudinary.service");
+const fs = require("fs");
+const getPublicId = require("../helper/cloudinary.helper");
 
 class ProductController {
   static async create(req, res, next) {
     try {
       const result = await sequelize.transaction(async (t) => {
         const { id } = req.user;
+        const { files } = req;
+
         req.body.status = "published";
         req.body.sellerId = id;
         req.body.slug = generateSlug(req.body.name);
+        const images = new Array();
+
+        // check if file uploaded
+        if (!files) {
+          throw {
+            status: 400,
+            message: ["Image is required"],
+          };
+        } else {
+          for (let file of files) {
+            const result = await cloudinary.uploader.upload(file.path);
+            fs.unlinkSync(file.path);
+            images.push(result.secure_url);
+          }
+
+          req.body.images = images;
+        }
 
         const product = await Product.create(req.body, {
           include: ["seller"],
@@ -76,8 +98,10 @@ class ProductController {
         sort = ["createdAt", "DESC"];
       }
 
-      if (req.query.sellerId) {
-        filter.sellerId = { [Op.ne]: req.body.sellerId };
+      console.log(req.user == undefined);
+      if (req.user != undefined) {
+        filter.sellerId = { [Op.ne]: req.user.id };
+        console.log(req.user, filter);
       }
 
       const products = await Product.findAll({
@@ -104,15 +128,44 @@ class ProductController {
 
   static async update(req, res, next) {
     try {
-      if (req.body.name) req.body.slug = generateSlug(req.body.name);
+      const result = await sequelize.transaction(async (t) => {
+        const { files } = req;
+        if (req.body.name) req.body.slug = generateSlug(req.body.name);
+        const images = new Array();
 
-      const product = await Product.update(req.body, {
-        where: { id: req.params.productId },
-        returning: true,
+        // check if file uploaded
+        if (files) {
+          for (let file of files) {
+            const result = await cloudinary.uploader.upload(file.path);
+            fs.unlinkSync(file.path);
+            images.push(result.secure_url);
+          }
+          req.body.images = images;
+
+          // delete product picture
+          const productBefore = await Product.findOne({
+            where: { id: req.params.productId },
+            transaction: t,
+          });
+
+          if (productBefore.images) {
+            for (let image of productBefore.images) {
+              const match = getPublicId(image);
+              await cloudinary.uploader.destroy(match);
+            }
+          }
+        }
+
+        console.log(req.body);
+        const product = await Product.update(req.body, {
+          where: { id: req.params.productId },
+          returning: true,
+          transaction: t,
+        });
+
+        const response = setResponse("success", product[1][0], null);
+        res.status(200).json(response);
       });
-
-      const response = setResponse("success", product[1][0], null);
-      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -141,6 +194,19 @@ class ProductController {
           status: 404,
           message: "Product not found",
         };
+      }
+
+      if (req.user && product.sellerId != req.user.id) {
+        console.log("ok");
+        const bid = await Bid.findOne({
+          where: {
+            buyerId: req.user.id,
+            status: "pending",
+            productId: product.id,
+          },
+        });
+
+        product.setDataValue("bidded", bid ? true : false);
       }
 
       const response = setResponse("success", product, null);
@@ -198,16 +264,16 @@ class ProductController {
 
   static async deleteProduct(req, res, next) {
     try {
-          await Product.destroy({
-            where: {
-              id: req.params.productId
-            }
-          })
-          const response=setResponse("success",null,"Product deleted")
-          res.status(200).json(response)
-    } catch(err) {
-      next(err)
-    } 
+      await Product.destroy({
+        where: {
+          id: req.params.productId,
+        },
+      });
+      const response = setResponse("success", null, "Product deleted");
+      res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 module.exports = ProductController;
