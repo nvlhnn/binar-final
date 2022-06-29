@@ -36,28 +36,23 @@ class WishlistController {
     }
   }
 
-  static async getUserWishlists(req, res, next) {
-  }
+  static async getUserWishlists(req, res, next) {}
+
   static async destroy(req, res, next) {
     try {
-      await Wishlist.destroy({
-        where: {
-          id: req.params.wishlistId,
-        },
-
+      const { user } = req;
+      const product = await Product.findOne({
+        where: { id: req.params.productId },
       });
-      const response = setResponse(
-        "success", 
-        null, 
-        "Wishlist destroyed"
-        );
+
+      await user.removeProduct(product);
+      const response = setResponse("success", null, "Wishlist destroyed");
 
       res.status(200).json(response);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
-  } 
-  
+  }
 }
 
 module.exports = WishlistController;

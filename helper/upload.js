@@ -14,10 +14,7 @@ const upload = multer({
       cb("Profile picture should be an image", false);
     }
   },
-
-  //   limits: {
-  //     fileSize: 3000000,
-  //   },
+  limits: { fieldSize: 5 * 1024 * 1024 * 1024 },
 });
 
 module.exports = upload;
