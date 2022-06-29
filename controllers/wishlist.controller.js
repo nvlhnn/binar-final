@@ -52,7 +52,21 @@ class WishlistController {
     }
   }
 
-  static async destroy(req, res, next) {}
+  static async destroy(req, res, next) {
+    try {
+      const { user } = req;
+      const product = await Product.findOne({
+        where: { id: req.params.productId },
+      });
+
+      await user.removeProduct(product);
+      const response = setResponse("success", null, "Wishlist destroyed");
+
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = WishlistController;
