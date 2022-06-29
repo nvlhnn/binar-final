@@ -36,7 +36,21 @@ class WishlistController {
     }
   }
 
-  static async getUserWishlists(req, res, next) {}
+  static async getUserWishlists(req, res, next) {
+    try {
+      const user = await User.findOne({
+        where: {
+          id: req.user.id,
+        },
+        include: Product,
+      });
+      // res.status(200).json(user);
+      const response = setResponse("success", user.Products, null);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async destroy(req, res, next) {
     try {
