@@ -259,6 +259,7 @@ let swagger = {
       put: {
         tags: ["user"],
         summary: "update user data",
+        consumes: ["multipart/form-data"],
         parameters: [
           {
             name: "Authorization",
@@ -266,28 +267,34 @@ let swagger = {
             type: "string",
           },
           {
-            name: "body",
-            in: "body",
-            schema: {
-              type: "object",
-              properties: {
-                name: {
-                  example: "user",
-                },
-                profilePicture: {
-                  example: "cloudinary.contoh-url-gambar-1.com",
-                },
-                city: {
-                  example: "yogyakarta",
-                },
-                address: {
-                  example: "catur tunggal, rt 2 rw 5 sleman yogyakarta",
-                },
-                phone: {
-                  example: "0811221113868",
-                },
-              },
-            },
+            name: "profilePicture",
+            in: "formData",
+            type: "file",
+            required: true,
+          },
+          {
+            name: "name",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "city",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "address",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "phone",
+            in: "formData",
+            type: "string",
+            required: true,
           },
         ],
         responses: {
@@ -304,6 +311,27 @@ let swagger = {
                 },
                 message: {
                   example: null,
+                },
+              },
+            },
+          },
+          400: {
+            description: "Bad Request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: [
+                    "city is required",
+                    "address is required",
+                    "phone is required",
+                  ],
                 },
               },
             },
@@ -355,6 +383,12 @@ let swagger = {
         tags: ["product"],
         summary: "get all products with or without filter",
         parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            description: "provide token to exclude user's product",
+          },
           {
             name: "search",
             in: "query",
@@ -430,6 +464,7 @@ let swagger = {
       post: {
         tags: ["product"],
         summary: "create product",
+        consumes: ["multipart/form-data"],
         parameters: [
           {
             name: "Authorization",
@@ -437,33 +472,40 @@ let swagger = {
             type: "string",
           },
           {
-            name: "body",
-            in: "body",
-            schema: {
-              type: "object",
-              properties: {
-                name: {
-                  example: "Sea Stone",
-                },
-                price: {
-                  example: "420000",
-                },
-                categories: {
-                  example: ["hobi", "kesehatan"],
-                },
-                description: {
-                  example:
-                    "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
-                },
-                images: {
-                  example: [
-                    "cloudinary.contoh-url-gambar-1.com",
-                    "cloudinary.contoh-url-gambar-2.com",
-                    "cloudinary.contoh-url-gambar-3.com",
-                  ],
-                },
-              },
+            name: "name",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "price",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "categories[]",
+            in: "formData",
+            type: "array",
+            items: {
+              type: "string",
             },
+            required: true,
+          },
+          {
+            name: "description",
+            in: "formData",
+            type: "string",
+            required: true,
+          },
+          {
+            name: "images",
+            in: "formData",
+            type: "array",
+            items: {
+              type: "file",
+            },
+            required: true,
           },
         ],
         responses: {
@@ -611,6 +653,13 @@ let swagger = {
             required: true,
             type: "string",
           },
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+            description:
+              "provide token to check if the user have pending bid on this product",
+          },
         ],
         responses: {
           200: {
@@ -622,7 +671,42 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  $ref: "#/definitions/Product",
+                  type: "object",
+                  properties: {
+                    id: {
+                      example: 1,
+                    },
+                    name: {
+                      example: "Sea Stone",
+                    },
+                    slug: {
+                      example: "sea-stone",
+                    },
+                    price: {
+                      example: "420000",
+                    },
+                    categories: {
+                      example: ["hobi", "kesehatan"],
+                    },
+                    description: {
+                      example:
+                        "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
+                    },
+                    status: {
+                      example: "published",
+                    },
+                    seller: {
+                      $ref: "#/definitions/User",
+                    },
+                    images: {
+                      example: [
+                        "cloudinary.contoh-url-gambar-1.com",
+                        "cloudinary.contoh-url-gambar-2.com",
+                        "cloudinary.contoh-url-gambar-3.com",
+                      ],
+                    },
+                    bidded: false,
+                  },
                 },
                 message: {
                   example: null,
@@ -684,32 +768,34 @@ let swagger = {
             type: "string",
           },
           {
-            name: "body",
-            in: "body",
-            schema: {
-              type: "object",
-              properties: {
-                name: {
-                  example: "Sea Stone",
-                },
-                price: {
-                  example: "420000",
-                },
-                categories: {
-                  example: ["hobi", "kesehatan"],
-                },
-                description: {
-                  example:
-                    "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
-                },
-                images: {
-                  example: [
-                    "cloudinary.contoh-url-gambar-1.com",
-                    "cloudinary.contoh-url-gambar-2.com",
-                    "cloudinary.contoh-url-gambar-3.com",
-                  ],
-                },
-              },
+            name: "name",
+            in: "formData",
+            type: "string",
+          },
+          {
+            name: "price",
+            in: "formData",
+            type: "string",
+          },
+          {
+            name: "categories[]",
+            in: "formData",
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          {
+            name: "description",
+            in: "formData",
+            type: "string",
+          },
+          {
+            name: "images",
+            in: "formData",
+            type: "array",
+            items: {
+              type: "file",
             },
           },
         ],
@@ -767,6 +853,23 @@ let swagger = {
                 },
                 message: {
                   example: null,
+                },
+              },
+            },
+          },
+          400: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: ["Nothing to update"],
                 },
               },
             },
