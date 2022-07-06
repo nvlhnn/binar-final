@@ -169,6 +169,8 @@ class NotificationController {
         }
       );
 
+      global.io.emit("notif", { msg: "notif update" });
+
       const response = setResponse(
         "success",
         null,

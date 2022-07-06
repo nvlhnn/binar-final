@@ -48,6 +48,8 @@ class ProductController {
 
         const response = setResponse("success", product, null);
 
+        global.io.emit("notif", { msg: "product created" });
+
         res.status(201).json(response);
       });
     } catch (error) {
