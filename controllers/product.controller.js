@@ -48,7 +48,7 @@ class ProductController {
 
         const response = setResponse("success", product, null);
 
-        global.io.emit("notif", { msg: "product created" });
+        global.io.to(req.user.id).emit("notif", { msg: "product created" });
 
         res.status(201).json(response);
       });

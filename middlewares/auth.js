@@ -8,14 +8,18 @@ const auth = async (req, res, next) => {
         session: false,
       },
       (err, user, info) => {
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized",
-          };
+        try {
+          if (!user) {
+            throw {
+              status: 401,
+              message: "Unauthorized",
+            };
+          } else {
+            req.user = user;
+            next();
+          }
+        } catch (error) {
+          next(error);
         }
       }
     )(req, res, next);

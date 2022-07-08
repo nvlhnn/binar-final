@@ -5,7 +5,6 @@ const socketio = require("socket.io");
 const auth = require("./middlewares/auth");
 
 const server = http.createServer(app);
-
 const io = socketio(server, {
   cors: {
     origin: "*",
@@ -16,10 +15,9 @@ const io = socketio(server, {
 global.io = io;
 
 io.on("connection", (socket) => {
-  console.log("connected");
-
-  socket.on("disconnect", () => {
-    console.log("Disconnected!!");
+  socket.on("setUser", function (id) {
+    socket.join(id);
+    console.log("user telah terhubung dengan id", id);
   });
 });
 
