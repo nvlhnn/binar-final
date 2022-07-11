@@ -70,7 +70,7 @@ class NotificationController {
             model: Product,
             as: "product",
             attributes: {
-              exclude: ["sellerId", "createdAt", "updatedAt"],
+              exclude: ["sellerId", "updatedAt"],
             },
             include: [
               {
@@ -86,13 +86,7 @@ class NotificationController {
             model: Bid,
             as: "bid",
             attributes: {
-              exclude: [
-                "sellerId",
-                "buyerId",
-                "productId",
-                "createdAt",
-                "updatedAt",
-              ],
+              exclude: ["sellerId", "buyerId", "productId", "updatedAt"],
             },
             include: [
               {
