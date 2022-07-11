@@ -178,7 +178,7 @@ class BidController {
       }
 
       const buyer = await User.findOne({
-        where: { id: req.params.buyerId, status: { [Op.ne]: "declined" } },
+        where: { id: req.params.buyerId },
         attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         // order: [[{ model: Bid, as: "bids" }, "id", "desc"]],
       });
@@ -191,7 +191,12 @@ class BidController {
       }
 
       const bids = await Bid.findAll({
-        where: { sellerId: req.user.id, buyerId: req.params.buyerId },
+        where: {
+          sellerId: req.user.id,
+          buyerId: req.params.buyerId,
+
+          status: { [Op.ne]: "declined" },
+        },
         include: [
           {
             model: Product,
