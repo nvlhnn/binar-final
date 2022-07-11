@@ -1,8 +1,7 @@
-io.on("connection", function (socket) {
-  socket.emit("news", { hello: "world" });
-  socket.on("my other event", function (data) {
-    console.log(data);
-  });
-});
+// global.io.on("connection", (socket) => {
+//   console.log("connected");
 
-module.exports = io
+//   socket.on("disconnect", () => {
+//     console.log("Disconnected!!");
+//   });
+// });

@@ -1,5 +1,6 @@
 const { User, Bid, Product, Notification, sequelize } = require("../models");
 const setResponse = require("../helper/response.helper");
+const { Op } = require("sequelize");
 
 class BidController {
   static async bidding(req, res, next) {
@@ -177,7 +178,7 @@ class BidController {
       }
 
       const buyer = await User.findOne({
-        where: { id: req.params.buyerId },
+        where: { id: req.params.buyerId, status: { [Op.ne]: "declined" } },
         attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         // order: [[{ model: Bid, as: "bids" }, "id", "desc"]],
       });
