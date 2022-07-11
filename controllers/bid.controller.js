@@ -205,13 +205,7 @@ class BidController {
           ["createdAt", "DESC"],
         ],
         attributes: {
-          exclude: [
-            "productId",
-            "buyerId",
-            "sellerId",
-            "createdAt",
-            "updatedAt",
-          ],
+          exclude: ["productId", "buyerId", "sellerId", "updatedAt"],
         },
       });
 
