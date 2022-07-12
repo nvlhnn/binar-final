@@ -13,8 +13,8 @@ router.get("/", [auth], UserController.getInfo);
 router.put(
   "/",
   [
-    auth,
     multerValidator(upload.single("profilePicture")),
+    auth,
     validate(updateRule),
   ],
   UserController.update

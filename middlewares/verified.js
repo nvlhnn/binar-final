@@ -9,7 +9,7 @@ const verified = async (req, res, next) => {
       return next();
     } else {
       throw {
-        status: 400,
+        status: 403,
         message: "User not verified",
       };
     }

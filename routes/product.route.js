@@ -24,7 +24,7 @@ router.post(
 );
 router.put(
   "/:productId",
-  [auth, isSeller, verified, multerValidator(upload.array("images"))],
+  [multerValidator(upload.array("images")), auth, isSeller, verified],
   productController.update
 );
 router.delete(
