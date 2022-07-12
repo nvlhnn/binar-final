@@ -15,9 +15,9 @@ router.get("/", [authOrPublic], productController.getAll);
 router.post(
   "/",
   [
+    multerValidator(upload.array("images")),
     auth,
     verified,
-    multerValidator(upload.array("images")),
     validate(createRule),
   ],
   productController.create
