@@ -14,12 +14,12 @@ const io = socketio(server, {
 // io.use(auth);
 global.io = io;
 
-io.on("connection", (socket) => {
-  socket.on("setUser", function (id) {
-    socket.join(id);
-    console.log("user telah terhubung dengan id", id);
-  });
-});
+// io.on("connection", (socket) => {
+//   socket.on("setUser", function (id) {
+//     socket.join(id);
+//     console.log("user telah terhubung dengan id", id);
+//   });
+// });
 
 server.listen(port, async () => {
   console.log(`app listening on port ${port}`);
