@@ -1947,6 +1947,76 @@ let swagger = {
         ],
       },
     },
+    "/wishlists/": {
+      get: {
+        tags: ["wishlist"],
+        summary: "get all user's whistlist",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+          },
+        ],
+        responses: {
+          200: {},
+          401: {},
+          500: {},
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
+    "/wishlists/product/{productId}": {
+      post: {
+        tags: ["wishlist"],
+        summary: "add a product to user's wishlists",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+          },
+        ],
+        responses: {
+          201: {},
+          401: {},
+          403: {},
+          404: {},
+          500: {},
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+      delete: {
+        tags: ["wishlist"],
+        summary: "delete a product from user's whistlist",
+        parameters: [
+          {
+            name: "Authorization",
+            in: "header",
+            type: "string",
+          },
+        ],
+        responses: {
+          200: {},
+          401: {},
+          404: {},
+          500: {},
+        },
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+      },
+    },
   },
 
   securityDefinitions: {
