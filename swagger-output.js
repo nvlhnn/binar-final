@@ -1959,9 +1959,93 @@ let swagger = {
           },
         ],
         responses: {
-          200: {},
-          401: {},
-          500: {},
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      example: 1,
+                    },
+                    name: {
+                      example: "Sea Stone",
+                    },
+                    slug: {
+                      example: "sea-stone",
+                    },
+                    price: {
+                      example: "420000",
+                    },
+                    categories: {
+                      example: ["hobi", "kesehatan"],
+                    },
+                    description: {
+                      example:
+                        "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
+                    },
+                    status: {
+                      example: "published",
+                    },
+                    sellerId: {
+                      $ref: "#/definitions/User",
+                    },
+                    images: {
+                      example: [
+                        "cloudinary.contoh-url-gambar-1.com",
+                        "cloudinary.contoh-url-gambar-2.com",
+                        "cloudinary.contoh-url-gambar-3.com",
+                      ],
+                    },
+                    // Wishlists:  "userId": 1,
+                    // "productId": 1,
+                  },
+                },
+                message: {
+                  example: null,
+                },
+              },
+            },
+            401: {
+              description: "Unauthorized",
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    example: "error",
+                  },
+                  data: {
+                    example: null,
+                  },
+                  message: {
+                    example: "Unauthorized",
+                  },
+                },
+              },
+            },
+            500: {
+              description: "Internal Server Error",
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    example: "error",
+                  },
+                  data: {
+                    example: null,
+                  },
+                  message: {
+                    example: "Internal Server Error",
+                  },
+                },
+              },
+            },
+          },
         },
         security: [
           {
@@ -1982,11 +2066,91 @@ let swagger = {
           },
         ],
         responses: {
-          201: {},
-          401: {},
-          403: {},
-          404: {},
-          500: {},
+          201: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Product added to wishlist",
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "For product request",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Cant add wishlist of your own product",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Product not found",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
         },
         security: [
           {
