@@ -1,5 +1,6 @@
 const { User, Bid, Product, Notification, sequelize } = require("../models");
 const setResponse = require("../helper/response.helper");
+const { Op } = require("sequelize");
 
 class BidController {
   static async bidding(req, res, next) {
@@ -81,6 +82,10 @@ class BidController {
         await Notification.create(bidinNotif, { transaction: t });
         await Notification.create(biddingNotif, { transaction: t });
 
+        global.io.to(product.sellerId).emit("notif", { msg: "bidin product" });
+        global.io.to(req.user.id).emit("notif", { msg: "bidding product" });
+
+        console.log(req.user.id, product.sellerId);
         // console.log(bid.id);
         // const bidRes = await Bid.findByPk(27, {
         //   include: ["buyer", "seller"],
@@ -141,6 +146,7 @@ class BidController {
             { where: { id: bid.id }, transaction: t }
           );
           await Notification.create(bidAccepted, { transaction: t });
+          global.io.to(bid.buyerId).emit("notif", { msg: "bid accepted" });
         } else if (status == "declined") {
           await Bid.update(
             { status: status },
@@ -185,7 +191,12 @@ class BidController {
       }
 
       const bids = await Bid.findAll({
-        where: { sellerId: req.user.id, buyerId: req.params.buyerId },
+        where: {
+          sellerId: req.user.id,
+          buyerId: req.params.buyerId,
+
+          status: { [Op.ne]: "declined" },
+        },
         include: [
           {
             model: Product,
@@ -200,13 +211,7 @@ class BidController {
           ["createdAt", "DESC"],
         ],
         attributes: {
-          exclude: [
-            "productId",
-            "buyerId",
-            "sellerId",
-            "createdAt",
-            "updatedAt",
-          ],
+          exclude: ["productId", "buyerId", "sellerId", "updatedAt"],
         },
       });
 

@@ -5,9 +5,10 @@ const multerValidator = (uploader) => {
         if (err) {
           console.log(err.message);
           let msg;
+
           msg =
             err.code == "LIMIT_UNEXPECTED_FILE"
-              ? "Multiple file uploaded"
+              ? "Invalid file input"
               : err.message;
           throw {
             status: 400,

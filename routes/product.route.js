@@ -15,16 +15,16 @@ router.get("/", [authOrPublic], productController.getAll);
 router.post(
   "/",
   [
+    multerValidator(upload.array("images")),
     auth,
     verified,
-    multerValidator(upload.array("images")),
     validate(createRule),
   ],
   productController.create
 );
 router.put(
   "/:productId",
-  [auth, isSeller, verified, multerValidator(upload.array("images"))],
+  [multerValidator(upload.array("images")), auth, isSeller, verified],
   productController.update
 );
 router.delete(

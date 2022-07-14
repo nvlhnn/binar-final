@@ -48,6 +48,8 @@ class ProductController {
 
         const response = setResponse("success", product, null);
 
+        global.io.to(req.user.id).emit("notif", { msg: "product created" });
+
         res.status(201).json(response);
       });
     } catch (error) {
@@ -156,7 +158,13 @@ class ProductController {
           }
         }
 
-        console.log(req.body);
+        if (Object.getOwnPropertyNames(req.body).length === 0) {
+          throw {
+            status: 400,
+            message: ["Nothing to update"],
+          };
+        }
+
         const product = await Product.update(req.body, {
           where: { id: req.params.productId },
           returning: true,
@@ -174,6 +182,7 @@ class ProductController {
   static async getBySlug(req, res, next) {
     try {
       const slug = req.params.productSlug;
+      let bid;
 
       const product = await Product.findOne({
         where: {
@@ -197,17 +206,15 @@ class ProductController {
       }
 
       if (req.user && product.sellerId != req.user.id) {
-        console.log("ok");
-        const bid = await Bid.findOne({
+        bid = await Bid.findOne({
           where: {
             buyerId: req.user.id,
             status: "pending",
             productId: product.id,
           },
         });
-
-        product.setDataValue("bidded", bid ? true : false);
       }
+      product.setDataValue("bidded", bid ? true : false);
 
       const response = setResponse("success", product, null);
       res.status(200).json(response);

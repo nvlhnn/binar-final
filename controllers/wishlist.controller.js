@@ -4,10 +4,10 @@ const setResponse = require("../helper/response.helper");
 class WishlistController {
   static async create(req, res, next) {
     try {
-      // const { user } = req;
-      const user = await User.findOne({
-        where: { email: req.user.email },
-      });
+      const { user } = req;
+      // const user = await User.findOne({
+      //   where: { email: req.user.email },
+      // });
 
       const product = await Product.findOne({
         where: { id: req.params.productId },
@@ -20,9 +20,16 @@ class WishlistController {
         };
       }
 
-      const test = await user.addProduct(product);
+      if (product.sellerId == user.id) {
+        throw {
+          status: 403,
+          message: "Cant add wishlist of your own product",
+        };
+      }
 
-      console.log(test);
+      // console.log(product.sellerId == user.id);
+
+      await user.addProduct(product);
 
       const response = setResponse(
         "success",
@@ -58,6 +65,13 @@ class WishlistController {
       const product = await Product.findOne({
         where: { id: req.params.productId },
       });
+
+      if (!product) {
+        throw {
+          status: 404,
+          message: "Product not found",
+        };
+      }
 
       await user.removeProduct(product);
       const response = setResponse("success", null, "Wishlist destroyed");
