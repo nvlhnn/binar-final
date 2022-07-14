@@ -49,9 +49,18 @@ class WishlistController {
         where: {
           id: req.user.id,
         },
-        include: Product,
+        include: [
+          {
+            model: Product,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            through: {
+              attributes: [],
+            },
+          },
+        ],
       });
       // res.status(200).json(user);
+
       const response = setResponse("success", user.Products, null);
       res.status(200).json(response);
     } catch (error) {

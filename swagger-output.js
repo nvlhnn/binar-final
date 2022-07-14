@@ -1974,42 +1974,9 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  type: "object",
-                  properties: {
-                    id: {
-                      example: 1,
-                    },
-                    name: {
-                      example: "Sea Stone",
-                    },
-                    slug: {
-                      example: "sea-stone",
-                    },
-                    price: {
-                      example: "420000",
-                    },
-                    categories: {
-                      example: ["hobi", "kesehatan"],
-                    },
-                    description: {
-                      example:
-                        "Seastone is a naturally-occurring—but immensely rare—mineral substance, best known for its negation of Devil Fruit abilities. Though it originates from Wano Country, Seastone is currently utilized in many inventions and devices across the world. As the most advanced research on it was conducted by the Marine scientist Dr. Vegapunk, its use is particularly common among the Marines and World Government",
-                    },
-                    status: {
-                      example: "published",
-                    },
-                    sellerId: {
-                      $ref: "#/definitions/User",
-                    },
-                    images: {
-                      example: [
-                        "cloudinary.contoh-url-gambar-1.com",
-                        "cloudinary.contoh-url-gambar-2.com",
-                        "cloudinary.contoh-url-gambar-3.com",
-                      ],
-                    },
-                    // Wishlists:  "userId": 1,
-                    // "productId": 1,
+                  type: "array",
+                  items: {
+                    $ref: "#/definitions/Product",
                   },
                 },
                 message: {
@@ -2030,6 +1997,23 @@ let swagger = {
                   },
                   message: {
                     example: "Unauthorized",
+                  },
+                },
+              },
+            },
+            403: {
+              description: "Forbbiden",
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    example: "error",
+                  },
+                  data: {
+                    example: null,
+                  },
+                  message: {
+                    example: "User not verified",
                   },
                 },
               },
@@ -2119,6 +2103,23 @@ let swagger = {
                 },
                 message: {
                   example: "Cant add wishlist of your own product",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbbiden",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "User not verified",
                 },
               },
             },
