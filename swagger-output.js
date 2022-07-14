@@ -786,6 +786,12 @@ let swagger = {
             },
           },
           {
+            name: "status",
+            in: "formData",
+            type: "string",
+            description: "published or sold",
+          },
+          {
             name: "description",
             in: "formData",
             type: "string",
@@ -2005,10 +2011,91 @@ let swagger = {
           },
         ],
         responses: {
-          200: {},
-          401: {},
-          404: {},
-          500: {},
+          200: {
+            description: "Ok",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "success",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Wishlist destroyed",
+                },
+              },
+            },
+          },
+          401: {
+            description: "Unauthorized",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Unauthorized",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Forbbiden",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "User not verified",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Resource not found",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Product not found",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Internal Server Error",
+            schema: {
+              type: "object",
+              properties: {
+                status: {
+                  example: "error",
+                },
+                data: {
+                  example: null,
+                },
+                message: {
+                  example: "Internal Server Error",
+                },
+              },
+            },
+          },
         },
         security: [
           {
