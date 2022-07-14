@@ -1,7 +1,7 @@
 const getPublicId = (url) => {
-  const match = url.match(/upload\/(?:v\d+\/)?([^\.]+)/)[1];
+  const match = url.match(/upload\/(?:v\d+\/)?([^\.]+)/);
 
-  return match;
+  return match ? match[1] : null;
 };
 
 module.exports = getPublicId;

@@ -135,6 +135,11 @@ class ProductController {
         if (req.body.name) req.body.slug = generateSlug(req.body.name);
         const images = new Array();
 
+        const productBefore = await Product.findOne({
+          where: { id: req.params.productId },
+          transaction: t,
+        });
+
         // check if file uploaded
         if (files) {
           for (let file of files) {
@@ -145,17 +150,24 @@ class ProductController {
           req.body.images = images;
 
           // delete product picture
-          const productBefore = await Product.findOne({
-            where: { id: req.params.productId },
-            transaction: t,
-          });
-
           if (productBefore.images) {
             for (let image of productBefore.images) {
               const match = getPublicId(image);
-              await cloudinary.uploader.destroy(match);
+              if (match) await cloudinary.uploader.destroy(match);
             }
           }
+        }
+
+        // check if product status is sold, delete all bid
+        if (req.body.status && req.body.status == "sold") {
+          const bids = await Bid.update(
+            { status: "declined" },
+            {
+              where: { productId: req.params.productId },
+            }
+          );
+
+          console.log(bids);
         }
 
         if (Object.getOwnPropertyNames(req.body).length === 0) {
