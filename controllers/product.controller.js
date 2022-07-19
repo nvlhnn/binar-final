@@ -121,7 +121,9 @@ class ProductController {
         attributes: { exclude: ["sellerId", "createdAt", "updatedAt"] },
       });
 
-      const response = setResponse("success", products, null);
+      const count = await Product.count({ where: filter });
+
+      const response = setResponse("success", { products, count }, null);
       res.status(200).json(response);
     } catch (error) {
       next(error);
