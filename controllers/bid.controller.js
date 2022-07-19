@@ -16,6 +16,14 @@ class BidController {
         }
 
         // check if bider is seller
+        if (product.status == "sold") {
+          throw {
+            status: 403,
+            message: "Product already sold",
+          };
+        }
+
+        // check if bider is seller
         if (product.sellerId == req.user.id) {
           throw {
             status: 403,
