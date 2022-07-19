@@ -127,7 +127,7 @@ class BidController {
         }
 
         // check bid status is not pending
-        if (bid.status != "pending") {
+        if (bid.status == "declined") {
           throw {
             status: 403,
             message: "Can't update this bid status",
