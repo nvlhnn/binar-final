@@ -10,19 +10,19 @@ class UserController {
       const { file } = req;
 
       // check if file uploaded
-      if (!file) {
+      if (!req.user.verified && !file) {
         throw {
           status: 400,
           message: ["Profile picture is required"],
         };
-      } else {
+      } else if (file) {
         const result = await cloudinary.uploader.upload(req.file.path);
         fs.unlinkSync(req.file.path);
         req.body.profilePicture = result.secure_url;
       }
 
       // delete user profile picture
-      if (req.user.profilePicture) {
+      if (file && req.user.profilePicture) {
         const match = getPublicId(req.user.profilePicture);
         await cloudinary.uploader.destroy(match);
       }

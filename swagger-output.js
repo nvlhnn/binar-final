@@ -431,9 +431,17 @@ let swagger = {
                   example: "success",
                 },
                 data: {
-                  type: "array",
-                  items: {
-                    $ref: "#/definitions/Product",
+                  type: "object",
+                  properties: {
+                    products: {
+                      type: "array",
+                      items: {
+                        $ref: "#/definitions/Product",
+                      },
+                    },
+                    count: {
+                      example: "5",
+                    },
                   },
                 },
                 message: {
@@ -2054,6 +2062,12 @@ let swagger = {
             in: "header",
             type: "string",
           },
+          {
+            name: "productId",
+            in: "path",
+            required: true,
+            type: "string",
+          },
         ],
         responses: {
           201: {
@@ -2174,6 +2188,12 @@ let swagger = {
             in: "header",
             type: "string",
           },
+          {
+            name: "productId",
+            in: "path",
+            required: true,
+            type: "string",
+          },  
         ],
         responses: {
           200: {
