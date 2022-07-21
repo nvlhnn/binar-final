@@ -714,6 +714,7 @@ let swagger = {
                       ],
                     },
                     bidded: false,
+                    wished: false,
                   },
                 },
                 message: {
@@ -2193,7 +2194,7 @@ let swagger = {
             in: "path",
             required: true,
             type: "string",
-          },  
+          },
         ],
         responses: {
           200: {
