@@ -10,10 +10,10 @@ router.put(
   "/:bidId",
   [auth, validate(updateRule)],
   BidController.updateBidStatus
-);
+);  
 router.post(
   "/product/:productId",
-  [auth, validate(createRule)],
+  [auth, verified, validate(createRule)],
   BidController.bidding
 );
 router.get("/user/:buyerId", [auth, verified], BidController.getBuyerBids);

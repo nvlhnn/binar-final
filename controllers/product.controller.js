@@ -1,6 +1,13 @@
-const { User, Product, sequelize, Notification, Bid } = require("../models");
+const {
+  User,
+  Product,
+  sequelize,
+  Notification,
+  Bid,
+  Wishlist,
+} = require("../models");
 const setResponse = require("../helper/response.helper");
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const generateSlug = require("../helper/slug.helper");
 const cloudinary = require("../services/cloudinary.service");
 const fs = require("fs");
@@ -197,6 +204,7 @@ class ProductController {
     try {
       const slug = req.params.productSlug;
       let bid;
+      let wished = false;
 
       const product = await Product.findOne({
         where: {
@@ -227,8 +235,36 @@ class ProductController {
             productId: product.id,
           },
         });
+
+        await sequelize
+          .query(
+            `SELECT * FROM "Wishlists" WHERE "Wishlists"."userId" = ? AND "Wishlists"."productId" = ?;`,
+            {
+              replacements: [req.user.id, product.id],
+              type: QueryTypes.SELECT,
+            }
+          )
+          .then((res) => (wished = res));
+
+        // wished = await User.findOne({
+        //   where: {
+        //     id: req.user.id,
+        //   },
+        //   include: [
+        //     {
+        //       model: Product,
+        //       where: { id: product.id },
+        //       through: {
+        //         attributes: [],
+        //       },
+        //     },
+        //   ],
+        // });
+
+        wished = wished;
       }
       product.setDataValue("bidded", bid ? true : false);
+      product.setDataValue("wished", wished.length > 0 ? true : false);
 
       const response = setResponse("success", product, null);
       res.status(200).json(response);
