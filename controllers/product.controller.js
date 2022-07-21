@@ -150,7 +150,7 @@ class ProductController {
         });
 
         // check if file uploaded
-        if (files) {
+        if (files.length > 0) {
           for (let file of files) {
             const result = await cloudinary.uploader.upload(file.path);
             fs.unlinkSync(file.path);
@@ -159,6 +159,7 @@ class ProductController {
           req.body.images = images;
 
           // delete product picture
+          // console.log(!files);
           if (productBefore.images) {
             for (let image of productBefore.images) {
               const match = getPublicId(image);
