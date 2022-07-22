@@ -142,13 +142,15 @@ class ProductController {
       const result = await sequelize.transaction(async (t) => {
         const { files } = req;
         if (req.body.name) req.body.slug = generateSlug(req.body.name);
-        const images = new Array();
 
         const productBefore = await Product.findOne({
           where: { id: req.params.productId },
           transaction: t,
         });
 
+        req.body.images = [...productBefore.images];
+
+        // check if images will be null
         if (
           req.body.imagesBefore &&
           req.body.imagesBefore[0] == "" &&
@@ -160,34 +162,24 @@ class ProductController {
           };
         }
 
-        req.body.images = [];
+        // check if want to delete some image
+        if (req.body.imagesBefore) {
+          for (let image of req.body.images) {
+            if (!req.body.imagesBefore.includes(image)) {
+              const match = getPublicId(image);
+              if (match) await cloudinary.uploader.destroy(match);
+            }
+          }
+          req.body.images = req.body.imagesBefore;
+        }
+
         // check if file uploaded
         if (files && files.length > 0) {
           for (let file of files) {
             const result = await cloudinary.uploader.upload(file.path);
             fs.unlinkSync(file.path);
-            images.push(result.secure_url);
+            req.body.images.push(result.secure_url);
           }
-          req.body.images = images;
-
-          // delete product picture
-          // console.log(!files);
-        }
-
-        if (productBefore.images && req.body.imagesBefore) {
-          // console.log(req.body.imagesBefore);
-
-          for (let image of productBefore.images) {
-            if (!req.body.imagesBefore.includes(image)) {
-              const match = getPublicId(image);
-              if (match) await cloudinary.uploader.destroy(match);
-            } else {
-              req.body.images.push(image);
-            }
-          }
-        }
-
-        if (req.body.imagesBefore) {
         }
 
         // check if product status is sold, delete all bid
