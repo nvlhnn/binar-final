@@ -11,7 +11,7 @@ const upload = multer({
     ) {
       cb(null, true);
     } else {
-      cb("Profile picture should be an image", false);
+      cb("File should be an image", false);
     }
   },
   limits: { fieldSize: 5 * 1024 * 1024 * 1024 },

@@ -3,7 +3,7 @@ const multerValidator = (uploader) => {
     uploader(req, res, function (err) {
       try {
         if (err) {
-          console.log(err.message);
+          console.log(err);
           let msg;
 
           msg =
@@ -12,13 +12,12 @@ const multerValidator = (uploader) => {
               : err.message;
           throw {
             status: 400,
-            message: [msg],
+            message: [msg ? msg : err],
           };
         } else {
           next();
         }
       } catch (error) {
-        // console.log("ac");
         next(error);
       }
     });

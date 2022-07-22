@@ -149,8 +149,20 @@ class ProductController {
           transaction: t,
         });
 
+        if (
+          req.body.imagesBefore &&
+          req.body.imagesBefore[0] == "" &&
+          files.length == 0
+        ) {
+          throw {
+            status: 400,
+            message: ["Product images cannot be empty"],
+          };
+        }
+
+        req.body.images = [];
         // check if file uploaded
-        if (files.length > 0) {
+        if (files && files.length > 0) {
           for (let file of files) {
             const result = await cloudinary.uploader.upload(file.path);
             fs.unlinkSync(file.path);
@@ -160,12 +172,22 @@ class ProductController {
 
           // delete product picture
           // console.log(!files);
-          if (productBefore.images) {
-            for (let image of productBefore.images) {
+        }
+
+        if (productBefore.images && req.body.imagesBefore) {
+          // console.log(req.body.imagesBefore);
+
+          for (let image of productBefore.images) {
+            if (!req.body.imagesBefore.includes(image)) {
               const match = getPublicId(image);
               if (match) await cloudinary.uploader.destroy(match);
+            } else {
+              req.body.images.push(image);
             }
           }
+        }
+
+        if (req.body.imagesBefore) {
         }
 
         // check if product status is sold, delete all bid

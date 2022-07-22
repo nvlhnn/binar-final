@@ -795,6 +795,14 @@ let swagger = {
             },
           },
           {
+            name: "imagesBefore[]",
+            in: "formData",
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          {
             name: "status",
             in: "formData",
             type: "string",
