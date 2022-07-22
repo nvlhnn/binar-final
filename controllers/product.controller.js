@@ -160,7 +160,6 @@ class ProductController {
       }
       const result = await sequelize.transaction(async (t) => {
         const { files } = req;
-        if (req.body.name) req.body.slug = generateSlug(req.body.name);
 
         const productBefore = await Product.findOne({
           where: { id: req.params.productId },
@@ -168,6 +167,10 @@ class ProductController {
         });
 
         req.body.images = [...productBefore.images];
+
+        if (req.body.name && req.body.name !== productBefore.name) {
+          req.body.slug = generateSlug(req.body.name);
+        }
 
         // check if images will be null
         if (
