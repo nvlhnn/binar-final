@@ -15,11 +15,18 @@ const getPublicId = require("../helper/cloudinary.helper");
 
 class ProductController {
   static async create(req, res, next) {
+    console.log(req.body);
     try {
       const result = await sequelize.transaction(async (t) => {
         const { id } = req.user;
         const { files } = req;
 
+        for (const category in req.body.categories) {
+          if (req.body.categories[0].includes(",")) {
+            // console.log(req.body.categories[0]);
+            req.body.categories = req.body.categories[0].split(",");
+          }
+        }
         req.body.status = "published";
         req.body.sellerId = id;
         req.body.slug = generateSlug(req.body.name);
@@ -139,6 +146,18 @@ class ProductController {
 
   static async update(req, res, next) {
     try {
+      // swagger fix
+      for (const category in req.body.categories) {
+        if (req.body.categories[0].includes(",")) {
+          req.body.categories = req.body.categories[0].split(",");
+        }
+      }
+
+      for (const imgB in req.body.imagesBefore) {
+        if (req.body.imagesBefore[0].includes(",")) {
+          req.body.imagesBefore = req.body.imagesBefore[0].split(",");
+        }
+      }
       const result = await sequelize.transaction(async (t) => {
         const { files } = req;
         if (req.body.name) req.body.slug = generateSlug(req.body.name);

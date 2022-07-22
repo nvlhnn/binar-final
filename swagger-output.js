@@ -764,6 +764,7 @@ let swagger = {
       put: {
         tags: ["product"],
         summary: "update product by id",
+        consumes: ["multipart/form-data"],
         parameters: [
           {
             name: "productId",
