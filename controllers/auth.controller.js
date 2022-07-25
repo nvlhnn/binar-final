@@ -22,6 +22,7 @@ class AuthController {
             message: "Invalid email or password",
           };
         }
+
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const token = generateJWT(user);
           user.password = undefined;
